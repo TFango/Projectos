@@ -8,7 +8,7 @@ Proyecto: Sistema de Gestión de un Juego de Rol Completo
 -----------------------------------------------------------------------------------------------------------------------------------------------
 Descripción General:
 Vas a desarrollar un sistema completo para un juego de rol en el que los jugadores pueden crear y gestionar personajes, explorar mazmorras, luchar contra enemigos, y recolectar botines. 
-El proyecto se dividirá en varias partes, cada una con sus propios desafíos.
+El proyecto se dividirá en varias partes.
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -17,13 +17,18 @@ El proyecto se dividirá en varias partes, cada una con sus propios desafíos.
 
 Parte 1: Creación de Personajes
 
+La creacion de personajes funcionara de la siguiente manera: El usuario podra ingresar un nombre para su personaje, que clase usar y en que archivo guardarlo, mientras la partida se va desarrollando, 
+el usuario podra usar diferentes objetos (pocion, armadura o arma).
+
 
 1. Clase Personaje (Superclase Abstracta):
 
   -Atributos: nombre, nivel, salud, mana, fuerza, defensa, velocidad, inventario (una lista de objetos).
-    .Métodos:
+    -Interfaz:
     .atacar(Personaje enemigo): Realiza un ataque básico.
     .recibirDaño(int cantidad): Reduce la salud del personaje.
+
+    -Metodos:	
     .usarObjeto(Objeto objeto): Usa un objeto del inventario.
     .subirNivel(): Incrementa el nivel del personaje y mejora sus atributos.
 
@@ -63,7 +68,9 @@ Parte 1: Creación de Personajes
 
 *************
 
-5.Subclases de Objeto:
+5.Enum de Objeto con metodos:
+
+Estos luegos seran puestos en el personaje para que decida que usar.
 
   -Arma:
     .Atributos: daño, durabilidad.
@@ -81,6 +88,12 @@ Parte 1: Creación de Personajes
 -----------------------------------------------------------------------------------------------------------------------
 
 Parte 2: Sistema de Mazmorras y Combate
+
+El sistema de mazmorras funcionara de la siguiente manera: Imaginemos una torre, la cual esta divida por pisos (la cual llamaremos niveles), cada nivel esta divido por habitaciones y un boss final,
+la torre tendra un maximo de 6 pisos, pero las habitaciones seran aleatorias ( 4 entre 6), la ultima habitacion de estas, sera el boss final. Los enemigos y el boss seran aleatorios, pero ya estaran definidos en el sistema. Ademas,
+los turnos siempre seran uno y uno, osea que, primero atacara el usuario y luego el enemigo o el boss, y luego iria el usuario nuevamente, repitiendose este ciclo hasta que uno de los dos muera, siempre que el usuario tenga el turno,
+podra elegir entre usar una pocion o atacar, si usa una pocion no podra atacar y el turno pasara al enemigo. Luego de derrotar al boss, el usuario subira de nivel, aumentando sus estadisticas, pero los enemigos y el boss tambien seran
+mas fuertes en los proximos niveles.
 
 
 1.Clase Mazmorra:
@@ -121,6 +134,8 @@ Parte 2: Sistema de Mazmorras y Combate
 
 Parte 3: Sistema de Progreso y Guardado
 
+El sistema de progreso y guardado funcionara de la siguiente manera, cuando el usuario decida salir de la partida, se debera de guardar el archivo y el estado de la partida, para que cuando quiera volver a cargarlo, pueda iniciar
+en donde se quedo.
 
 1.Clase Juego:
 
@@ -162,20 +177,6 @@ Parte 4: Sistema de Interfaz de Usuario (Consola)
 
 ----------------------------------------------------------------------------------------------------
 
-Parte 5: Desafíos Extra
-
-
-1.Implementa un Sistema de Misiones:
-
- .Crea una clase Mision que permita a los personajes aceptar y completar misiones con recompensas.
-
-2.Añade un Sistema de Magia:
-
- .Desarrolla una clase Hechizo y permite a los personajes aprender y lanzar diferentes hechizos.
-
-3.Desarrolla un Sistema de Economía:
-
- .Crea una clase Mercado donde los personajes pueden comprar y vender objetos.
 Resumen:
 
 ---------------------------------------------------------------------------------
