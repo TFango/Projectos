@@ -7,10 +7,13 @@ public abstract class Personaje {
     protected String nombre;
     protected int nivel;
     protected int salud;
-    public int fuerza;
+    protected int fuerza;
     protected int defensa;
     protected int velocidad;
     protected Inventario inventario;
+
+    protected int aumentarFuerzaTemporal = 0;
+    protected int aumentarDefensaTemporal = 0;
 
     public Personaje(String nombre, int nivel, int salud, int fuerza, int defensa, int velocidad) {
         this.nombre = nombre;
@@ -58,7 +61,35 @@ public abstract class Personaje {
         this.defensa += 3;
         this.salud += 10;
         this.velocidad += 2;
+        System.out.println(nombre + " ha subido de nivel, ahora es nivel: " + nivel);
     }
+
+    public void aumentarFuerza(int incremento){
+        this.aumentarFuerzaTemporal = incremento;
+        this.fuerza += incremento;
+        System.out.println(nombre + " ha aumentado su fuerza, ahora cuenta con " + fuerza + " de fuerza.");
+    }
+
+    public void aumentarDefensa(int incremento){
+        this.aumentarDefensaTemporal = incremento;
+        this.defensa += incremento;
+        System.out.println(nombre + " ha aumentado su defensa, ahora cuenta con " + defensa + " de defensa.");
+    }
+
+    public void curar(int incremento){
+        this.salud += incremento;
+        System.out.println(nombre + " se ha curado " + incremento + " salud total: " + salud);
+    }
+
+    public void revertirCambiosTemporales(){
+        this.fuerza -= aumentarFuerzaTemporal;
+        this.defensa -= aumentarDefensaTemporal;
+        aumentarDefensaTemporal = 0;
+        aumentarFuerzaTemporal = 0;
+        System.out.println("Los incrementos de fuerza y defensa de " + nombre + " han sido revertidos.");
+    }
+
+
 
     public String getNombre() {
         return nombre;
