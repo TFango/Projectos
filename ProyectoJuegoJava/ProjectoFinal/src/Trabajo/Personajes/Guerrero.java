@@ -1,8 +1,10 @@
 package Trabajo.Personajes;
 
 public class Guerrero extends Personaje {
+    private static final long serialVersionUID = 1l;
     private int resistencia;
     private int fuerzaExtra;
+
 
     public Guerrero(String nombre) {
         super(nombre, 1, 120, 50, 20, 7);
