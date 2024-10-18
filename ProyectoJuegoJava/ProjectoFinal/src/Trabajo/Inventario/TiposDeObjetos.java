@@ -19,6 +19,14 @@ public enum TiposDeObjetos {
             System.out.println(personaje.getNombre() + " ha usado un arma y aumenta su daño por esta batalla");
         }
     },
+
+    ARMADOS("EspadaDos",5,15,true){
+        @Override
+        public void usar(Personaje personaje) {
+            personaje.aumentarFuerza(ARMADOS.efecto);
+            System.out.println(personaje.getNombre() + " ha usado un arma y aumenta su daño por esta batalla.");
+        }
+    },
     /**
      * Se crea otro tipo de objeto "armadura" el cual sera temporal.
      */

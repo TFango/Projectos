@@ -2,10 +2,13 @@ package Trabajo.Inventario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
-public class Inventario {
+public class Inventario implements Serializable{
+    private static final long serialVersionUID = 1l;
     private List<Objeto> objetos;
     private int capacidadMaxima;
+
 
     public Inventario(int capacidadMaxima) {
         this.objetos = new ArrayList<>();

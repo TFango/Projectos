@@ -1,8 +1,11 @@
 package Trabajo.Personajes;
 
 public class Arquero extends Personaje {
+
+    private static final long serialVersionUID = 1l;
     private int precision;
     private int agilidad;
+
 
     public Arquero(String nombre) {
         super(nombre, 1, 90, 15, 10, 12);

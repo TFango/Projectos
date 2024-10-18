@@ -2,8 +2,10 @@ package Trabajo.Personajes;
 
 import Trabajo.Inventario.Inventario;
 import Trabajo.Inventario.Objeto;
+import java.io.Serializable;
 
-public abstract class Personaje {
+public abstract class Personaje implements Serializable{
+    private static final long serialVersionUID = 1l;
     protected String nombre;
     protected int nivel;
     protected int salud;

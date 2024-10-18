@@ -1,6 +1,7 @@
 package Trabajo.Personajes;
 
 public class Mago extends Personaje {
+    private static final long serialVersionUID = 1l;
     private int poderMagico;
     private int manaExtra;
 
