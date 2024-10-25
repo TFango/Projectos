@@ -2,9 +2,11 @@ package Trabajo.Personajes;
 
 import Trabajo.Inventario.Inventario;
 import Trabajo.Inventario.Objeto;
+import Trabajo.Inventario.TiposDeObjetos;
+
 import java.io.Serializable;
 
-public abstract class Personaje implements Serializable{
+public abstract class Personaje implements Serializable {
     private static final long serialVersionUID = 1l;
     protected String nombre;
     protected int nivel;
@@ -37,9 +39,9 @@ public abstract class Personaje implements Serializable{
     // RECIBIR DAÑO
     // --------------
 
-    public void recibirDaño(int cantidad){
+    public void recibirDaño(int cantidad) {
         this.salud -= cantidad;
-        if(this.salud < 0){
+        if (this.salud < 0) {
             this.salud = 0;
         }
     }
@@ -48,16 +50,20 @@ public abstract class Personaje implements Serializable{
     // USAR OBJETO
     // --------------
 
-    public void usarObjeto(Objeto objeto){
+    public void usarObjeto(int index) {
+        if (index < 0 || index >= inventario.getObjetos().size()) {
+            System.out.printf("Indice no valido.");
+            return;
+        }
+        Objeto objeto = inventario.getObjetos().get(index);
         objeto.usar(this);
-        inventario.removerObjeto(objeto);
     }
 
     // --------------
     // SUBIR NIVEL
     // --------------
 
-    public void subirNivel(){
+    public void subirNivel() {
         this.nivel++;
         this.fuerza += 5;
         this.defensa += 3;
@@ -66,31 +72,30 @@ public abstract class Personaje implements Serializable{
         System.out.println(nombre + " ha subido de nivel, ahora es nivel: " + nivel);
     }
 
-    public void aumentarFuerza(int incremento){
+    public void aumentarFuerza(int incremento) {
         this.aumentarFuerzaTemporal = incremento;
         this.fuerza += incremento;
         System.out.println(nombre + " ha aumentado su fuerza, ahora cuenta con " + fuerza + " de fuerza.");
     }
 
-    public void aumentarDefensa(int incremento){
+    public void aumentarDefensa(int incremento) {
         this.aumentarDefensaTemporal = incremento;
         this.defensa += incremento;
         System.out.println(nombre + " ha aumentado su defensa, ahora cuenta con " + defensa + " de defensa.");
     }
 
-    public void curar(int incremento){
+    public void curar(int incremento) {
         this.salud += incremento;
         System.out.println(nombre + " se ha curado " + incremento + " salud total: " + salud);
     }
 
-    public void revertirCambiosTemporales(){
+    public void revertirCambiosTemporales() {
         this.fuerza -= aumentarFuerzaTemporal;
         this.defensa -= aumentarDefensaTemporal;
         aumentarDefensaTemporal = 0;
         aumentarFuerzaTemporal = 0;
         System.out.println("Los incrementos de fuerza y defensa de " + nombre + " han sido revertidos.");
     }
-
 
 
     public String getNombre() {

@@ -12,38 +12,38 @@ public enum TiposDeObjetos {
     /**
      * Se crea un tipo objeto "arma" el cual sera temporal.
      */
-    ARMA("Espada", 5, 10, true){
+    ARMA("Espada", 5, 10, true) {
         @Override
         public void usar(Personaje personaje) {
-            personaje.aumentarFuerza(ARMA.efecto);
+            personaje.aumentarFuerza(ARMA.getEfecto());
             System.out.println(personaje.getNombre() + " ha usado un arma y aumenta su daño por esta batalla");
         }
     },
 
-    ARMADOS("EspadaDos",5,15,true){
+    ARMADOS("EspadaDos", 5, 15, true) {
         @Override
         public void usar(Personaje personaje) {
-            personaje.aumentarFuerza(ARMADOS.efecto);
+            personaje.aumentarFuerza(ARMADOS.getEfecto());
             System.out.println(personaje.getNombre() + " ha usado un arma y aumenta su daño por esta batalla.");
         }
     },
     /**
      * Se crea otro tipo de objeto "armadura" el cual sera temporal.
      */
-    ARMADURA("Armadura", 15, 20, true){
+    ARMADURA("Armadura", 15, 20, true) {
         @Override
         public void usar(Personaje personaje) {
-            personaje.aumentarDefensa(ARMADURA.efecto);
+            personaje.aumentarDefensa(ARMADURA.getEfecto());
             System.out.println(personaje.getNombre() + " ha usado una armadura y aumenta su defensa por esta batalla.");
         }
     },
     /**
      * Se crea otro tipo de objeto "pocion" el cual no sera temporal.
      */
-    POCION("Pocion de vida", 0, 20, false){
+    POCION("Pocion de vida", 0, 20, false) {
         @Override
         public void usar(Personaje personaje) {
-            personaje.curar(POCION.efecto);
+            personaje.curar(POCION.getEfecto());
             System.out.println(personaje.getNombre() + " ha usado una pocion de vida y se ha curado, vida total: " + personaje.getSalud());
         }
     };
@@ -74,4 +74,7 @@ public enum TiposDeObjetos {
         return nombre;
     }
 
+    public int getEfecto() {
+        return efecto;
+    }
 }
