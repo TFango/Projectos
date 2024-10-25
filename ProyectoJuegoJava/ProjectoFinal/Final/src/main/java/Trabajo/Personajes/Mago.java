@@ -20,4 +20,20 @@ public class Mago extends Personaje {
         enemigo.recibirDaño(this.poderMagico * 2);
         this.manaExtra -= 10;
     }
+
+    public int getPoderMagico() {
+        return poderMagico;
+    }
+
+    public int getManaExtra() {
+        return manaExtra;
+    }
+
+    public void setPoderMagico(int poderMagico) {
+        this.poderMagico = poderMagico;
+    }
+
+    public void setManaExtra(int manaExtra) {
+        this.manaExtra = manaExtra;
+    }
 }

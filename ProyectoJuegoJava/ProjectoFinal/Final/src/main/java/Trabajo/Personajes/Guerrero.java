@@ -28,4 +28,12 @@ public class Guerrero extends Personaje {
     public int getFuerzaExtra() {
         return fuerzaExtra;
     }
+
+    public void setResistencia(int resistencia) {
+        this.resistencia = resistencia;
+    }
+
+    public void setFuerzaExtra(int fuerzaExtra) {
+        this.fuerzaExtra = fuerzaExtra;
+    }
 }

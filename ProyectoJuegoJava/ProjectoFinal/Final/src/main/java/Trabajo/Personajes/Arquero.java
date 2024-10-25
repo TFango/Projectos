@@ -21,4 +21,20 @@ public class Arquero extends Personaje {
     public void dispararFlechaRapida(Personaje enemigo) {
         enemigo.recibirDaño(this.fuerza + this.precision);
     }
+
+    public int getPrecision() {
+        return precision;
+    }
+
+    public int getAgilidad() {
+        return agilidad;
+    }
+
+    public void setPrecision(int precision) {
+        this.precision = precision;
+    }
+
+    public void setAgilidad(int agilidad) {
+        this.agilidad = agilidad;
+    }
 }
