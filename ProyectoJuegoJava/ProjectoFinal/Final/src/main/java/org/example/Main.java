@@ -4,6 +4,7 @@ import Trabajo.Personajes.Arquero;
 import Trabajo.Personajes.Guerrero;
 import Trabajo.Personajes.Mago;
 import Trabajo.Personajes.Personaje;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.Scanner;
@@ -93,11 +94,48 @@ public class Main {
         return nuevoPersonaje;
     }
 
-    private static void guardarPersonaje(Personaje nuevoPersonaje, String nombreArchivo) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nombreArchivo))) {
-            oos.writeObject(nuevoPersonaje);
+    /**
+     * Metodo encargado de guardar el personaje creado en una archivo JSON
+     */
+    public static void guardarPersonaje(Personaje personaje, String nombreArchivo) {
+        JSONObject json = new JSONObject(); //Creacion de un objeto JSON, en este se almacenaran los datos del personaje
+
+        //Se agregan los atributos que tienen en comun todos los personajes.
+        json.put("nombre", personaje.getNombre());
+        json.put("nivel", personaje.getNivel());
+        json.put("salud", personaje.getSalud());
+        json.put("fuerza", personaje.getFuerza());
+        json.put("defensa", personaje.getDefensa());
+        json.put("velocidad", personaje.getVelocidad());
+        json.put("tipo", personaje.getClass().getSimpleName()); //Se añade el tipo de personaje ya sea (Guerrero, Arquero, Mago)
+
+        /**
+         * Se almacenan los atributos en especifico, se verifica el tipo de personaje pora guardar sus atributos
+         * Se usa un instanceof para determinar el tipo de personaje
+         */
+        if (personaje instanceof Guerrero) {
+            Guerrero guerrero = (Guerrero) personaje;
+            json.put("resistencia", guerrero.getResistencia());
+            json.put("fuerzaExtra", guerrero.getFuerzaExtra());
+        } else if (personaje instanceof Mago) {
+            Mago mago = (Mago) personaje;
+            json.put("poderMagico", mago.getPoderMagico());
+            json.put("manaExtra", mago.getManaExtra());
+        } else if (personaje instanceof Arquero) {
+            Arquero arquero = (Arquero) personaje;
+            json.put("precision", arquero.getPrecision());
+            json.put("agilidad", arquero.getAgilidad());
+        }
+
+        /**
+         * Se guardar el JSONObject en un archivo
+         */
+
+        try (FileWriter file = new FileWriter(nombreArchivo)) {
+            file.write(json.toString()); //Usado para escribir el objeto JSON en un archivo especifico
+            System.out.println("Personaje guardado en: " + nombreArchivo);
         } catch (IOException e) {
-            System.out.println("Error al guardar el personaje: " + e.getMessage());
+            System.out.println("ERROR al guardar el personaje" + e.getMessage());
         }
     }
 
@@ -115,14 +153,60 @@ public class Main {
         return personajeCargado;
     }
 
-    private static Personaje cargarPersonajeDesdeArchivo(String nombreArchivo) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(nombreArchivo))) {
-            return (Personaje) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error al cargar el personaje: " + e.getMessage());
+    /**
+     *Se encarga de leer el archivo JSON y crear un objeto Personaje a partir de los datos almacenados
+     */
+    public static Personaje cargarPersonajeDesdeArchivo(String nombreArchivo) {
+        String contenido;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(nombreArchivo))) {
+            contenido = reader.readLine();
+        } catch (IOException e) {
+            System.out.println("ERROR al cargar el personaje: " + e.getMessage());
             return null;
         }
-    }
+        //"BufferedReader" se utiliza para leer el contenido del archivo, en este caso se lee una linea que tendra el contenido del JSON completo.
+
+        JSONObject json = new JSONObject(contenido); //Creacion del JSONObject
+        /**
+         * A partir de los datos, se determina que tipo de personaje se esta creando y se inicializan sus atributos
+         */
+        String nombre = json.getString("nombre");//Se extrae el nombre
+        String tipo = json.getString("tipo");//Se extrae el tipo
+
+        Personaje personaje = null;
+        switch (tipo) {
+            case "Guerrero":
+                personaje = new Guerrero(nombre);
+                ((Guerrero) personaje).setResistencia(json.getInt("resistencia")); // Asegúrate de tener un método para esto
+                ((Guerrero) personaje).setFuerzaExtra(json.getInt("fuerzaExtra")); // Asegúrate de tener un método para esto
+                break;
+            case "Mago":
+                personaje = new Mago(nombre);
+                ((Mago) personaje).setPoderMagico(json.getInt("poderMagico"));
+                ((Mago) personaje).setManaExtra(json.getInt("manaExtra"));
+                break;
+            case "Arquero":
+                personaje = new Arquero(nombre);
+                // Establecer atributos adicionales
+                ((Arquero) personaje).setPrecision(json.getInt("presicion"));
+                ((Arquero) personaje).setAgilidad(json.getInt("agilidad"));
+                break;
+            default:
+                System.err.println("Tipo de personaje desconocido: " + tipo);
+                break;
+        }
+        if(personaje != null){
+            personaje.setNivel(json.getInt("nivel"));
+            personaje.setSalud(json.getInt("salud"));
+            personaje.setFuerza(json.getInt("fuerza"));
+            personaje.setDefensa(json.getInt("defensa"));
+            personaje.setVelocidad(json.getInt("velocidad"));
+        }
+        return personaje;
+
+
+}
 
     private static void borrarPersonaje(Scanner scanner) {
         System.out.println("Ingresa el nombre del archivo del personaje a borrar: ");
