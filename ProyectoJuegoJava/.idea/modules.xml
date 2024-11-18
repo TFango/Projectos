@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ProjectoFinal.iml" filepath="$PROJECT_DIR$/ProjectoFinal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProyectoJuegoJava.iml" filepath="$PROJECT_DIR$/ProyectoJuegoJava.iml" />
     </modules>
   </component>
 </project>

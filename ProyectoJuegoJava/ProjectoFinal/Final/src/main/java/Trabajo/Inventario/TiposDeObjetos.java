@@ -7,7 +7,7 @@ import Trabajo.Personajes.Personaje;
  * Osea que solo sirvan para una sola batalla y despues de esto se eliminen.
  * Al contrario de la pocion, que permitara usarse cuando desee.
  */
-public enum TiposDeObjetos {
+public enum TiposDeObjetos{
 
     /**
      * Se crea un tipo objeto "arma" el cual sera temporal.
@@ -19,21 +19,13 @@ public enum TiposDeObjetos {
             System.out.println(personaje.getNombre() + " ha usado un arma y aumenta su daño por esta batalla");
         }
     },
-
-    ARMADOS("EspadaDos", 5, 15, true) {
-        @Override
-        public void usar(Personaje personaje) {
-            personaje.aumentarFuerza(ARMADOS.getEfecto());
-            System.out.println(personaje.getNombre() + " ha usado un arma y aumenta su daño por esta batalla.");
-        }
-    },
     /**
      * Se crea otro tipo de objeto "armadura" el cual sera temporal.
      */
     ARMADURA("Armadura", 15, 20, true) {
         @Override
         public void usar(Personaje personaje) {
-            personaje.aumentarDefensa(ARMADURA.getEfecto());
+            personaje.aumentarDefensa(this.getEfecto());
             System.out.println(personaje.getNombre() + " ha usado una armadura y aumenta su defensa por esta batalla.");
         }
     },
@@ -43,7 +35,7 @@ public enum TiposDeObjetos {
     POCION("Pocion de vida", 0, 20, false) {
         @Override
         public void usar(Personaje personaje) {
-            personaje.curar(POCION.getEfecto());
+            personaje.curar(this.getEfecto());
             System.out.println(personaje.getNombre() + " ha usado una pocion de vida y se ha curado, vida total: " + personaje.getSalud());
         }
     };
@@ -52,10 +44,10 @@ public enum TiposDeObjetos {
      * Sirve para poder inicializar cada tipo de objeto con sus caracteristicas propias.
      */
 
-    private final String nombre;
-    private final int peso;
-    private final int efecto;
-    private final boolean esTemporal;
+    public final String nombre;
+    public final int peso;
+    public final int efecto;
+    public final boolean esTemporal;
 
     TiposDeObjetos(String nombre, int peso, int efecto, boolean esTemporal) {
         this.nombre = nombre;
@@ -77,4 +69,13 @@ public enum TiposDeObjetos {
     public int getEfecto() {
         return efecto;
     }
+
+    public int getPeso() {
+        return peso;
+    }
+
+    public boolean isEsTemporal() {
+        return esTemporal;
+    }
 }
+
