@@ -55,7 +55,6 @@ public class Main {
 
                             switch (opcionExploracion) {
                                 case "1":
-                                    // Crear una nueva mazmorra (puedes ajustar la cantidad de pisos según tu diseño)
                                     Mazmorra mazmorra = new Mazmorra(1);
                                     boolean mazmorraCompletada = false;
 
