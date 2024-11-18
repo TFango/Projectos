@@ -1,7 +1,9 @@
 package org.example;
 
-import Trabajo.Inventario.Objeto;
-import Trabajo.Inventario.TiposDeObjetos;
+import Trabajo.Enemigos.Combate;
+import Trabajo.Enemigos.Habitacion;
+import Trabajo.Enemigos.Mazmorra;
+import Trabajo.Inventario.*;
 import Trabajo.Personajes.Arquero;
 import Trabajo.Personajes.Guerrero;
 import Trabajo.Personajes.Mago;
@@ -9,6 +11,8 @@ import Trabajo.Personajes.Personaje;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -45,43 +49,92 @@ public class Main {
                         boolean explorando = true;
                         while (explorando) {
                             mostrarSubmenuExploracion();
-                            System.out.print("Seleccione una opción: ");
+                            System.out.printf("Seleccione una opcion: ");
                             String opcionExploracion = sc.nextLine();
 
+
                             switch (opcionExploracion) {
-                                case "1": // Seguir explorando
-                                    System.out.println("¡Sigues explorando la mazmorras! (Funcionalidad por implementar)");
-                                    break;
-                                case "2": // Mostrar Inventario
-                                    if (personajeActual != null) {
-                                        personajeActual.getInventario().mostrarInventario();
-                                    } else {
-                                        System.out.println("No hay personaje cargado.");
+                                case "1":
+                                    // Crear una nueva mazmorra (puedes ajustar la cantidad de pisos según tu diseño)
+                                    Mazmorra mazmorra = new Mazmorra(1);
+                                    boolean mazmorraCompletada = false;
+
+                                    while (mazmorra.getPisoActual() < mazmorra.getCantidadPisos()) {
+                                        List<Habitacion> habitaciones = mazmorra.getHabitacionesDelPisoActual();
+                                        for (Habitacion habitacion : habitaciones) {
+                                            if (habitacion.tieneEnemigo()) {
+
+                                                Combate combate = new Combate(personajeActual, habitacion.getEnemigo());
+                                                combate.iniciar();
+
+                                                if (!personajeActual.estaVivo()) {
+                                                    System.out.println("Has sido derrotado. Fin de la exploración.");
+                                                    explorando = false;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (mazmorra.avanzarPiso()) {
+                                            System.out.println("Has avanzado al siguiente piso.");
+                                        } else {
+                                            mazmorraCompletada = true;
+                                            break;
+                                        }
                                     }
+
+                                    if (mazmorraCompletada){
+                                        System.out.println("━━━━━━━━━━━━━━━━━━━━━");
+                                        System.out.println("🏆 **Haz completado la mazmorra. ¡Felicidades!**");
+                                    }
+
+                                    explorando = false;
                                     break;
-                                case "3": // Usar objeto
-                                    if (personajeActual != null) {
-                                        System.out.print("Ingrese el índice del objeto a usar: ");
+
+                                case "2":
+                                    personajeActual.getInventario().mostrarInventario();
+                                    break;
+                                case "3":
+                                    System.out.println("Ingrese el indice del objeto a usar: ");
+                                    try {
                                         int index = Integer.parseInt(sc.nextLine());
-                                        personajeActual.usarObjeto(index);
-                                    } else {
-                                        System.out.println("No hay personaje cargado.");
+                                        Objeto objetoUsado = personajeActual.getInventario().getObjetos().get(index);
+
+                                        if (objetoUsado != null) {
+                                            if (objetoUsado.getTipo() == TiposDeObjetos.ARMA) {
+                                                System.out.println("Usaste un arma. Fuerza aumentada temporalmente.");
+                                                personajeActual.setFuerza(personajeActual.getFuerza() + objetoUsado.getTipo().getEfecto());
+                                                personajeActual.getInventario().removerObjeto(index);
+                                            } else if (objetoUsado.getTipo() == TiposDeObjetos.ARMADURA) {
+                                                System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
+                                                personajeActual.setDefensa(personajeActual.getDefensa() + objetoUsado.getTipo().getEfecto());
+                                                personajeActual.getInventario().removerObjeto(index);
+                                            } else if (objetoUsado.getTipo() == TiposDeObjetos.POCION) {
+                                                System.out.println("Usaste una pocion. Salud restaurada.");
+                                                personajeActual.setSalud(personajeActual.getSalud() + objetoUsado.getTipo().getEfecto());
+                                            } else {
+                                                System.out.println("Objeto no encontrado.");
+                                            }
+                                        } else {
+                                            System.out.println("Indice invalido.");
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        System.out.println("Entrada no valida. Ingrese un numero.");
                                     }
                                     break;
                                 case "4":
-                                    System.out.println("╔══════════════════════════════════════════╗");
-                                    System.out.println(ROJO + "║ Saliendo de la mazmorra.            ║" + RESET);
-                                    System.out.println("╚══════════════════════════════════════════╝");
+                                    System.out.println("Saliendo de la mazmorra.");
                                     explorando = false;
                                     break;
                                 default:
-                                    System.out.println("Opción no válida. Intente de nuevo.");
+                                    System.out.println("Opcion no valida. Intente de nuevo.");
                                     break;
                             }
                         }
                     } else {
                         System.out.println("No hay personaje cargado.");
                     }
+
                     break;
                 case "5":
                     System.out.println("╔══════════════════════════════════════════╗");
@@ -122,8 +175,8 @@ public class Main {
         System.out.println("╔═══════════════════════════╗");
         System.out.println("║        EXPLORANDO         ║");
         System.out.println("╠═══════════════════════════╣");
-        System.out.println("║  1. Seguir explorando     ║");
-        System.out.println("║  2. Motrar inventario     ║");
+        System.out.println("║  1. Explorar Mazmorra     ║");
+        System.out.println("║  2. Mostrar inventario    ║");
         System.out.println("║  3. Usar objeto           ║");
         System.out.println("║  4. Salir                 ║");
         System.out.println("╚═══════════════════════════╝");
@@ -168,12 +221,11 @@ public class Main {
                 break;
         }
 
-        nuevoPersonaje.getInventario().agregarObjetos(new Objeto(TiposDeObjetos.ARMA.getNombre(), 5, true) {
-            @Override
-            public void usar(Personaje personaje) {
-                TiposDeObjetos.ARMA.usar(personaje);
-            }
-        });
+        nuevoPersonaje.getInventario().agregarObjetos(new Arma());
+        nuevoPersonaje.getInventario().agregarObjetos(new Armadura());
+        nuevoPersonaje.getInventario().agregarObjetos(new Pocion());
+
+        nuevoPersonaje.getInventario().mostrarInventario();
 
         System.out.print("\nIngresa el nombre del archivo para guardar: ");
         String nombreArchivo = sc.nextLine();
@@ -201,6 +253,17 @@ public class Main {
         json.put("defensa", personaje.getDefensa());
         json.put("velocidad", personaje.getVelocidad());
         json.put("tipo", personaje.getClass().getSimpleName()); //Se añade el tipo de personaje ya sea (Guerrero, Arquero, Mago)
+
+        List<JSONObject> objetosJSON = new ArrayList<>();
+        for (Objeto objeto : personaje.getInventario().getObjetos()) {
+            JSONObject objetoJSON = new JSONObject();
+            objetoJSON.put("nombre", objeto.getNombre());
+            objetoJSON.put("peso", objeto.getPeso());
+            objetoJSON.put("esTemporal", objeto.EsTemporal());
+            objetoJSON.put("tipo", objeto.getTipo().name());
+            objetosJSON.add(objetoJSON);
+        }
+        json.put("inventario", objetosJSON);
 
         /**
          * Se almacenan los atributos en especifico, se verifica el tipo de personaje pora guardar sus atributos
@@ -299,6 +362,31 @@ public class Main {
             personaje.setDefensa(json.getInt("defensa"));
             personaje.setVelocidad(json.getInt("velocidad"));
         }
+
+        Inventario inventario = personaje.getInventario();
+        inventario.getObjetos().clear();
+
+        for (Object obj : json.getJSONArray("inventario")) {
+            JSONObject objetoJSON = (JSONObject) obj;
+            String tipoObjeto = objetoJSON.getString("tipo");
+            Objeto objeto = null;
+
+            switch (tipoObjeto) {
+                case "ARMA":
+                    objeto = new Arma();
+                    break;
+                case "ARMADURA":
+                    objeto = new Armadura();
+                    break;
+                case "POCION":
+                    objeto = new Pocion();
+                    break;
+            }
+            if (objeto != null) {
+                inventario.agregarObjetos(objeto);
+            }
+        }
+
         return personaje;
 
     }

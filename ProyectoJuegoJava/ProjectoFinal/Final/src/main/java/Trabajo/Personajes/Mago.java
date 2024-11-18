@@ -1,5 +1,7 @@
 package Trabajo.Personajes;
 
+import Trabajo.Enemigos.Enemigo;
+
 public class Mago extends Personaje {
     private static final long serialVersionUID = 1l;
     private int poderMagico;
@@ -12,13 +14,17 @@ public class Mago extends Personaje {
     }
 
     @Override
-    public void atacar(Personaje enemigo) {
+    public void atacar(Enemigo enemigo) {
         enemigo.recibirDaño(this.poderMagico);
     }
 
     public void lanzarHechizo(Personaje enemigo) {
-        enemigo.recibirDaño(this.poderMagico * 2);
-        this.manaExtra -= 10;
+        if(manaExtra >= 10) {
+            enemigo.recibirDaño(this.poderMagico * 2);
+            this.manaExtra -= 10;
+        }else {
+            System.out.println(nombre + " no tiene suficiente mana para lanzar un hechizo ");
+        }
     }
 
     public int getPoderMagico() {
@@ -37,3 +43,4 @@ public class Mago extends Personaje {
         this.manaExtra = manaExtra;
     }
 }
+

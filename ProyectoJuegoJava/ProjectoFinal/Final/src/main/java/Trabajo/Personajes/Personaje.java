@@ -1,23 +1,28 @@
 package Trabajo.Personajes;
 
+import Trabajo.Enemigos.Enemigo;
 import Trabajo.Inventario.Inventario;
 import Trabajo.Inventario.Objeto;
-import Trabajo.Inventario.TiposDeObjetos;
 
-import java.io.Serializable;
-
-public abstract class Personaje implements Serializable {
-    private static final long serialVersionUID = 1l;
+public abstract class Personaje {
+    public Inventario getInventario;
     protected String nombre;
     protected int nivel;
     protected int salud;
     protected int fuerza;
     protected int defensa;
     protected int velocidad;
+    protected int saludMaxima = 100;
+    private int combatesGanados = 0;
+    protected int experiencia = 0;
     protected Inventario inventario;
 
     protected int aumentarFuerzaTemporal = 0;
     protected int aumentarDefensaTemporal = 0;
+    private boolean pocionUsada = false;
+    private boolean fuerzaAumentadaTemporalmente = false;
+    private boolean defensaAumentadaTemporalmente = false;
+    private boolean objetoUsado = false;
 
     public Personaje(String nombre, int nivel, int salud, int fuerza, int defensa, int velocidad) {
         this.nombre = nombre;
@@ -33,7 +38,7 @@ public abstract class Personaje implements Serializable {
     // HACER DAÑO
     // --------------
 
-    public abstract void atacar(Personaje personaje);
+    public abstract void atacar(Enemigo enemigo);
 
     // --------------
     // RECIBIR DAÑO
@@ -63,38 +68,89 @@ public abstract class Personaje implements Serializable {
     // SUBIR NIVEL
     // --------------
 
+    public void añadirExperiencia(int exp){
+        this.experiencia += exp;
+        System.out.println(nombre + " ha ganado " + exp + " puntos de experiencia. Experiencia total: " + this.experiencia);
+        if(this.experiencia >= 100){
+            subirNivel();
+        }
+    }
+
     public void subirNivel() {
         this.nivel++;
         this.fuerza += 5;
         this.defensa += 3;
         this.salud += 10;
+        if (this.salud > saludMaxima){
+            this.saludMaxima = saludMaxima;
+        }
         this.velocidad += 2;
+        this.experiencia -= 100;
         System.out.println(nombre + " ha subido de nivel, ahora es nivel: " + nivel);
     }
 
     public void aumentarFuerza(int incremento) {
-        this.aumentarFuerzaTemporal = incremento;
         this.fuerza += incremento;
         System.out.println(nombre + " ha aumentado su fuerza, ahora cuenta con " + fuerza + " de fuerza.");
     }
 
     public void aumentarDefensa(int incremento) {
-        this.aumentarDefensaTemporal = incremento;
         this.defensa += incremento;
         System.out.println(nombre + " ha aumentado su defensa, ahora cuenta con " + defensa + " de defensa.");
     }
 
     public void curar(int incremento) {
         this.salud += incremento;
+        if(this.salud > saludMaxima){
+            this.salud = saludMaxima;
+        }
         System.out.println(nombre + " se ha curado " + incremento + " salud total: " + salud);
     }
 
     public void revertirCambiosTemporales() {
-        this.fuerza -= aumentarFuerzaTemporal;
-        this.defensa -= aumentarDefensaTemporal;
-        aumentarDefensaTemporal = 0;
-        aumentarFuerzaTemporal = 0;
-        System.out.println("Los incrementos de fuerza y defensa de " + nombre + " han sido revertidos.");
+        if(aumentarFuerzaTemporal != 0) {
+            this.fuerza -= aumentarFuerzaTemporal;
+            aumentarFuerzaTemporal = 0;
+        }
+        if(aumentarDefensaTemporal != 0) {
+            this.defensa -= aumentarDefensaTemporal;
+            aumentarDefensaTemporal = 0;
+        }
+        if (pocionUsada){
+            pocionUsada = false;
+        }
+        objetoUsado = false;
+        System.out.println("Los incrementos de fuerza y defenesa de " + nombre + " han sido revertidos.");
+    }
+
+    public String obtenerSalud() {
+        return nombre + " tiene " + salud + " puntos de salud.";
+    }
+
+    public String obtenerBarraSalud() {
+        int longitudBarra = 20; // Longitud de la barra de salud
+        int saludActual = (int) ((double) salud / saludMaxima * longitudBarra);
+        String barraSalud = "|";
+        for (int i = 0; i < longitudBarra; i++) {
+            if (i < saludActual) {
+                barraSalud += "#";
+            } else {
+                barraSalud += "-";
+            }
+        }
+        barraSalud += "|";
+        return barraSalud;
+    }
+
+    public void registrarVictoria() {
+        combatesGanados++;
+        System.out.println(nombre + " ha ganado " + combatesGanados + " combates.");
+    }
+
+
+
+    public boolean estaVivo(){
+        return salud > 0;
     }
 
 
@@ -148,5 +204,41 @@ public abstract class Personaje implements Serializable {
 
     public Inventario getInventario() {
         return inventario;
+    }
+
+    public boolean isFuerzaAumentadaTemporalmente() {
+        return fuerzaAumentadaTemporalmente;
+    }
+
+    public boolean isDefensaAumentadaTemporalmente() {
+        return defensaAumentadaTemporalmente;
+    }
+
+    public void setAumentarFuerzaTemporal(int aumentarFuerzaTemporal) {
+        this.aumentarFuerzaTemporal = aumentarFuerzaTemporal;
+    }
+
+    public void setAumentarDefensaTemporal(int aumentarDefensaTemporal) {
+        this.aumentarDefensaTemporal = aumentarDefensaTemporal;
+    }
+
+    public void setFuerzaAumentadaTemporalmente(boolean fuerzaAumentadaTemporalmente) {
+        this.fuerzaAumentadaTemporalmente = fuerzaAumentadaTemporalmente;
+    }
+
+    public void setDefensaAumentadaTemporalmente(boolean defensaAumentadaTemporalmente) {
+        this.defensaAumentadaTemporalmente = defensaAumentadaTemporalmente;
+    }
+
+    public void setPocionUsada(boolean pocionUsada) {
+        this.pocionUsada = pocionUsada;
+    }
+
+    public boolean isObjetoUsado() {
+        return objetoUsado;
+    }
+
+    public void setObjetoUsado(boolean objetoUsado) {
+        this.objetoUsado = objetoUsado;
     }
 }

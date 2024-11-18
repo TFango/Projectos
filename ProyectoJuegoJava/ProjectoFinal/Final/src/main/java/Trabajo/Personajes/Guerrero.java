@@ -1,5 +1,7 @@
 package Trabajo.Personajes;
 
+import Trabajo.Enemigos.Enemigo;
+
 public class Guerrero extends Personaje {
     private static final long serialVersionUID = 1l;
     private int resistencia;
@@ -13,7 +15,7 @@ public class Guerrero extends Personaje {
     }
 
     @Override
-    public void atacar(Personaje enemigo) {
+    public void atacar(Enemigo enemigo) {
         enemigo.recibirDaño(this.fuerza);
     }
 
@@ -37,3 +39,4 @@ public class Guerrero extends Personaje {
         this.fuerzaExtra = fuerzaExtra;
     }
 }
+
