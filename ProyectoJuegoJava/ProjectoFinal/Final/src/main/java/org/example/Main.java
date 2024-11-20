@@ -8,6 +8,8 @@ import Trabajo.Personajes.Arquero;
 import Trabajo.Personajes.Guerrero;
 import Trabajo.Personajes.Mago;
 import Trabajo.Personajes.Personaje;
+import Trabajo.excepciones.OpcionInvalidaException;
+import Trabajo.excepciones.PersonajeException;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -36,13 +38,25 @@ public class Main {
 
             switch (opcion) {
                 case "1":
-                    personajeActual = crearPersonaje(sc);
+                    try{
+                        personajeActual = crearPersonaje(sc);
+                    }catch (PersonajeException e){
+                        System.out.println("Error: " + e.getMessage());
+                    }
                     break;
                 case "2":
-                    personajeActual = cargarPersonaje(sc);
+                    try{
+                        personajeActual = cargarPersonaje(sc);
+                    }catch (PersonajeException e){
+                        System.out.println("Error: " + e.getMessage());
+                    }
                     break;
                 case "3":
-                    borrarPersonaje(sc);
+                    try{
+                        borrarPersonaje(sc);
+                    }catch (PersonajeException e){
+                        System.out.println("Error: " + e.getMessage());
+                    }
                     break;
                 case "4":
                     if (personajeActual != null) {
@@ -97,28 +111,34 @@ public class Main {
                                     System.out.println("Ingrese el indice del objeto a usar: ");
                                     try {
                                         int index = Integer.parseInt(sc.nextLine());
-                                        Objeto objetoUsado = personajeActual.getInventario().getObjetos().get(index);
+                                        if (index >= 0 && index < personajeActual.getInventario().getObjetos().size()) {
+                                            Objeto objetoUsado = personajeActual.getInventario().getObjetos().get(index);
 
-                                        if (objetoUsado != null) {
-                                            if (objetoUsado.getTipo() == TiposDeObjetos.ARMA) {
-                                                System.out.println("Usaste un arma. Fuerza aumentada temporalmente.");
-                                                personajeActual.setFuerza(personajeActual.getFuerza() + objetoUsado.getTipo().getEfecto());
-                                                personajeActual.getInventario().removerObjeto(index);
-                                            } else if (objetoUsado.getTipo() == TiposDeObjetos.ARMADURA) {
-                                                System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
-                                                personajeActual.setDefensa(personajeActual.getDefensa() + objetoUsado.getTipo().getEfecto());
-                                                personajeActual.getInventario().removerObjeto(index);
-                                            } else if (objetoUsado.getTipo() == TiposDeObjetos.POCION) {
-                                                System.out.println("Usaste una pocion. Salud restaurada.");
-                                                personajeActual.setSalud(personajeActual.getSalud() + objetoUsado.getTipo().getEfecto());
+                                            if (objetoUsado != null) {
+                                                if (objetoUsado.getTipo() == TiposDeObjetos.ARMA) {
+                                                    System.out.println("Usaste un arma. Fuerza aumentada temporalmente.");
+                                                    personajeActual.setFuerza(personajeActual.getFuerza() + objetoUsado.getTipo().getEfecto());
+                                                    personajeActual.getInventario().removerObjeto(index);
+                                                } else if (objetoUsado.getTipo() == TiposDeObjetos.ARMADURA) {
+                                                    System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
+                                                    personajeActual.setDefensa(personajeActual.getDefensa() + objetoUsado.getTipo().getEfecto());
+                                                    personajeActual.getInventario().removerObjeto(index);
+                                                } else if (objetoUsado.getTipo() == TiposDeObjetos.POCION) {
+                                                    System.out.println("Usaste una pocion. Salud restaurada.");
+                                                    personajeActual.setSalud(personajeActual.getSalud() + objetoUsado.getTipo().getEfecto());
+                                                } else {
+                                                    System.out.println("Objeto no valido.");
+                                                }
                                             } else {
-                                                System.out.println("Objeto no encontrado.");
+                                                System.out.println("objeto no encontrado en el inventario.");
                                             }
-                                        } else {
-                                            System.out.println("Indice invalido.");
+                                        }else{
+                                            throw new OpcionInvalidaException("Indice invalido.");
                                         }
                                     } catch (NumberFormatException e) {
                                         System.out.println("Entrada no valida. Ingrese un numero.");
+                                    } catch (OpcionInvalidaException e){
+                                        System.out.println("Error: " + e.getMessage());
                                     }
                                     break;
                                 case "4":
@@ -183,7 +203,7 @@ public class Main {
     }
 
 
-    private static Personaje crearPersonaje(Scanner sc) {
+    private static Personaje crearPersonaje(Scanner sc)throws PersonajeException {
         mostrarSeparador();
         mostrarCarga();
         System.out.println("╔═════════════════════════════════════╗");
@@ -193,31 +213,38 @@ public class Main {
         System.out.print("Ingrese el nombre del personaje: ");
         String nombre = sc.nextLine();
 
+        if(nombre.isEmpty()){
+            throw new PersonajeException("El nombre del personaje no puede estar vacio.");
+        }
         // Selección de clase
-        System.out.println("\nSeleccione la clase del personaje: ");
-        System.out.println("1. Guerrero");
-        System.out.println("2. Mago");
-        System.out.println("3. Arquero");
-        System.out.print("Opción: ");
-        String claseSeleccionada = sc.nextLine();
+        Personaje nuevoPersonaje = null;
+        while ((nuevoPersonaje == null)) {
+            try {
+                System.out.println("\nSeleccione la clase del personaje: ");
+                System.out.println("1. Guerrero");
+                System.out.println("2. Mago");
+                System.out.println("3. Arquero");
+                System.out.print("Opción: ");
+                String claseSeleccionada = sc.nextLine();
 
-        Personaje nuevoPersonaje;
-        switch (claseSeleccionada) {
-            case "1":
-                nuevoPersonaje = new Guerrero(nombre);
-                break;
-            case "2":
-                nuevoPersonaje = new Mago(nombre);
-                break;
-            case "3":
-                nuevoPersonaje = new Arquero(nombre);
-                break;
-            default:
-                System.out.println("╔═════════════════════════════════════╗");
-                System.out.println("║ Opción no válida, creando Guerrero. ║");
-                System.out.println("╚═════════════════════════════════════╝");
-                nuevoPersonaje = new Guerrero(nombre);
-                break;
+                switch (claseSeleccionada) {
+                    case "1":
+                        nuevoPersonaje = new Guerrero(nombre);
+                        break;
+                    case "2":
+                        nuevoPersonaje = new Mago(nombre);
+                        break;
+                    case "3":
+                        nuevoPersonaje = new Arquero(nombre);
+                        break;
+                    default:
+                        throw new OpcionInvalidaException("╔═════════════════════════════════════╗" + "\n" +
+                                                          "║           Opción no válida.         ║" + "\n" +
+                                                          "╚═════════════════════════════════════╝");
+                }
+            }catch (OpcionInvalidaException e){
+                System.out.println( e.getMessage());
+            }
         }
 
         nuevoPersonaje.getInventario().agregarObjetos(new Arma());
@@ -229,10 +256,12 @@ public class Main {
         System.out.print("\nIngresa el nombre del archivo para guardar: ");
         String nombreArchivo = sc.nextLine();
 
-        guardarPersonaje(nuevoPersonaje, nombreArchivo);
-        System.out.println("╔═════════════════════════════════════╗");
-        System.out.println("║ Personaje creado y guardado         ║");
-        System.out.println("╚═════════════════════════════════════╝");
+        boolean personajeGuardadoConExito = guardarPersonaje(nuevoPersonaje, nombreArchivo);
+        if(personajeGuardadoConExito) {
+            System.out.println("╔═════════════════════════════════════╗");
+            System.out.println("║     Personaje creado y guardado     ║");
+            System.out.println("╚═════════════════════════════════════╝");
+        }
 
         return nuevoPersonaje;
     }
@@ -241,7 +270,8 @@ public class Main {
     /**
      * Metodo encargado de guardar el personaje creado en una archivo JSON
      */
-    public static void guardarPersonaje(Personaje personaje, String nombreArchivo) {
+
+    public static boolean guardarPersonaje(Personaje personaje, String nombreArchivo) {
         JSONObject json = new JSONObject(); //Creacion de un objeto JSON, en este se almacenaran los datos del personaje
 
         //Se agregan los atributos que tienen en comun todos los personajes.
@@ -289,16 +319,22 @@ public class Main {
         try (FileWriter file = new FileWriter(nombreArchivo)) {
             file.write(json.toString()); //Usado para escribir el objeto JSON en un archivo especifico
             System.out.println("Personaje guardado en: " + nombreArchivo);
+            return true;
         } catch (IOException e) {
             System.out.println("ERROR al guardar el personaje" + e.getMessage());
+            return false;
         }
     }
 
-    private static Personaje cargarPersonaje(Scanner scanner) {
+    private static Personaje cargarPersonaje(Scanner scanner) throws  PersonajeException{
         mostrarSeparador();
         mostrarCarga();
         System.out.println("Ingresa el nombre del archivo del personaje a cargar: ");
         String nombreArchivo = scanner.nextLine();
+
+        if(nombreArchivo.isEmpty()){
+            throw new PersonajeException("El nombre del archivo no puede estar vacio");
+        }
 
         Personaje personajeCargado = cargarPersonajeDesdeArchivo(nombreArchivo);
         if (personajeCargado != null) {
@@ -314,6 +350,7 @@ public class Main {
     /**
      * Se encarga de leer el archivo JSON y crear un objeto Personaje a partir de los datos almacenados
      */
+
     public static Personaje cargarPersonajeDesdeArchivo(String nombreArchivo) {
         String contenido;
 
@@ -390,11 +427,15 @@ public class Main {
 
     }
 
-    private static void borrarPersonaje(Scanner scanner) {
+    private static void borrarPersonaje(Scanner scanner) throws PersonajeException{
         mostrarSeparador();
         mostrarCarga();
         System.out.println("Ingresa el nombre del archivo del personaje a borrar: ");
         String archivo = scanner.nextLine();
+
+        if(archivo.isEmpty()){
+            throw new PersonajeException("El nombre del archivo no puede estar vacio.");
+        }
 
         File file = new File(archivo);
         if (file.delete()) {
