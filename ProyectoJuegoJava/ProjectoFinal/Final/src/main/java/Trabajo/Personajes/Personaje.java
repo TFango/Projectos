@@ -3,8 +3,9 @@ package Trabajo.Personajes;
 import Trabajo.Enemigos.Enemigo;
 import Trabajo.Inventario.Inventario;
 import Trabajo.Inventario.Objeto;
+import Trabajo.Inventario.TiposDeObjetos;
 
-public abstract class Personaje {
+public abstract class Personaje implements Objeto {
     public Inventario getInventario;
     protected String nombre;
     protected int nivel;
@@ -241,4 +242,19 @@ public abstract class Personaje {
     public void setObjetoUsado(boolean objetoUsado) {
         this.objetoUsado = objetoUsado;
     }
+
+    @Override
+    public String nombre() {return this.nombre;}
+
+    @Override
+    public int peso() {return peso();}
+
+    @Override
+    public boolean esTemporal() {return esTemporal();}
+
+    @Override
+    public TiposDeObjetos tipo() {return tipo();}
+
+    @Override
+    public void usar(Personaje personaje) {}
 }

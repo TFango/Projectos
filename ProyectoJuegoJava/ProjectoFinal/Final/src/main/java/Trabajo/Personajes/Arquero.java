@@ -39,5 +39,7 @@ import Trabajo.Enemigos.Enemigo;
         public void setAgilidad(int agilidad) {
             this.agilidad = agilidad;
         }
-}
+
+
+    }
 

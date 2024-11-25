@@ -3,7 +3,7 @@ package Trabajo.Inventario;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Inventario {
+public class Inventario  {
     private List<Objeto> objetos;
     private int capacidadMaxima;
 
@@ -26,7 +26,7 @@ public class Inventario {
         if(index >= 0 && index < objetos.size()){
             Objeto objeto = objetos.get(index);
             objetos.remove(index);
-            System.out.println("Has eliminado " + objeto.getNombre() + " al inventario.");
+            System.out.println("Has eliminado " + objeto.nombre()+ " al inventario.");
         }else {
             System.out.println("Indice invalido.");
         }
@@ -38,7 +38,7 @@ public class Inventario {
         }else {
             System.out.println("Inventario: ");
             for(Objeto objeto : objetos){
-                System.out.println("- " + objeto.getNombre());
+                System.out.println("- " + objeto.nombre());
             }
         }
     }
@@ -46,7 +46,7 @@ public class Inventario {
     public Objeto obtenerPocion(){
         for (int i = 0; i < objetos.size(); i++){
             Objeto objeto = objetos.get(i);
-            if(objeto.getTipo() == TiposDeObjetos.POCION){
+            if(objeto.tipo() == TiposDeObjetos.POCION){
                 removerObjeto(i);
                 return objeto;
             }
