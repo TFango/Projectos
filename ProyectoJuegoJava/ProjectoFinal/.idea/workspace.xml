@@ -5,21 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="008574b9-211a-47a2-9de1-38b51d82423e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Inventario/Arma.java" beforeDir="false" afterPath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Inventario/Arma.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Inventario/Armadura.java" beforeDir="false" afterPath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Inventario/Armadura.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Inventario/Inventario.java" beforeDir="false" afterPath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Inventario/Inventario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Inventario/Objeto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Inventario/Pocion.java" beforeDir="false" afterPath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Inventario/Pocion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Personajes/Arquero.java" beforeDir="false" afterPath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Personajes/Arquero.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Personajes/Personaje.java" beforeDir="false" afterPath="$PROJECT_DIR$/Final/src/main/java/Trabajo/Personajes/Personaje.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Final/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Final/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/Inventario.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/Inventario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/Objeto.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/Objeto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/TiposDeObjetos$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/TiposDeObjetos$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/TiposDeObjetos$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/TiposDeObjetos$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/TiposDeObjetos$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/TiposDeObjetos$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/TiposDeObjetos$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/TiposDeObjetos.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Inventario/TiposDeObjetos.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Personajes/Arquero.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Personajes/Arquero.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Personajes/Guerrero.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Personajes/Guerrero.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Personajes/Mago.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Personajes/Mago.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/Trabajo/Personajes/Personaje.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/Trabajo/Personajes/Personaje.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Final/target/classes/org/example/Main$1.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Final/target/classes/org/example/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/Final/target/classes/org/example/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../out/production/ProyectoJuegoJava/org/example/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../out/production/ProyectoJuegoJava/org/example/Main.class" afterDir="false" />
     </list>
@@ -32,35 +27,36 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Exception" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2p60xzvXSDMDr7EDa01EYp6c3Bh" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;creacion-Excepciones&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <method v="2">
@@ -91,6 +87,8 @@
       <option name="presentableId" value="Default" />
       <updated>1732071475293</updated>
       <workItem from="1732071477374" duration="6192000" />
+      <workItem from="1732415373670" duration="2142000" />
+      <workItem from="1732503782653" duration="2118000" />
     </task>
     <servers />
   </component>

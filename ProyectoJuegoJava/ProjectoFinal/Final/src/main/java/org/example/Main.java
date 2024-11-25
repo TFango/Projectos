@@ -115,17 +115,17 @@ public class Main {
                                             Objeto objetoUsado = personajeActual.getInventario().getObjetos().get(index);
 
                                             if (objetoUsado != null) {
-                                                if (objetoUsado.getTipo() == TiposDeObjetos.ARMA) {
+                                                if (objetoUsado.tipo() == TiposDeObjetos.ARMA) {
                                                     System.out.println("Usaste un arma. Fuerza aumentada temporalmente.");
-                                                    personajeActual.setFuerza(personajeActual.getFuerza() + objetoUsado.getTipo().getEfecto());
+                                                    personajeActual.setFuerza(personajeActual.getFuerza() + objetoUsado.tipo().getEfecto());
                                                     personajeActual.getInventario().removerObjeto(index);
-                                                } else if (objetoUsado.getTipo() == TiposDeObjetos.ARMADURA) {
+                                                } else if (objetoUsado.tipo() == TiposDeObjetos.ARMADURA) {
                                                     System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
-                                                    personajeActual.setDefensa(personajeActual.getDefensa() + objetoUsado.getTipo().getEfecto());
+                                                    personajeActual.setDefensa(personajeActual.getDefensa() + objetoUsado.tipo().getEfecto());
                                                     personajeActual.getInventario().removerObjeto(index);
-                                                } else if (objetoUsado.getTipo() == TiposDeObjetos.POCION) {
+                                                } else if (objetoUsado.tipo() == TiposDeObjetos.POCION) {
                                                     System.out.println("Usaste una pocion. Salud restaurada.");
-                                                    personajeActual.setSalud(personajeActual.getSalud() + objetoUsado.getTipo().getEfecto());
+                                                    personajeActual.setSalud(personajeActual.getSalud() + objetoUsado.tipo().getEfecto());
                                                 } else {
                                                     System.out.println("Objeto no valido.");
                                                 }
@@ -286,10 +286,10 @@ public class Main {
         List<JSONObject> objetosJSON = new ArrayList<>();
         for (Objeto objeto : personaje.getInventario().getObjetos()) {
             JSONObject objetoJSON = new JSONObject();
-            objetoJSON.put("nombre", objeto.getNombre());
-            objetoJSON.put("peso", objeto.getPeso());
-            objetoJSON.put("esTemporal", objeto.EsTemporal());
-            objetoJSON.put("tipo", objeto.getTipo().name());
+            objetoJSON.put("nombre", objeto.nombre());
+            objetoJSON.put("peso", objeto.peso());
+            objetoJSON.put("esTemporal", objeto.esTemporal());
+            objetoJSON.put("tipo", objeto.tipo().name());
             objetosJSON.add(objetoJSON);
         }
         json.put("inventario", objetosJSON);
@@ -373,8 +373,8 @@ public class Main {
         switch (tipo) {
             case "Guerrero":
                 personaje = new Guerrero(nombre);
-                ((Guerrero) personaje).setResistencia(json.getInt("resistencia")); // Asegúrate de tener un método para esto
-                ((Guerrero) personaje).setFuerzaExtra(json.getInt("fuerzaExtra")); // Asegúrate de tener un método para esto
+                ((Guerrero) personaje).setResistencia(json.getInt("resistencia"));
+                ((Guerrero) personaje).setFuerzaExtra(json.getInt("fuerzaExtra"));
                 break;
             case "Mago":
                 personaje = new Mago(nombre);
