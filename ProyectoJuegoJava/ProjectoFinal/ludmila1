@@ -1,1 +1,0 @@
-{"tipo":"Mago","manaExtra":60,"defensa":8,"nombre":"ludmila","nivel":1,"fuerza":10,"inventario":[{"tipo":"ARMA","peso":5,"nombre":"Espada","esTemporal":true},{"tipo":"ARMADURA","peso":15,"nombre":"Armadura","esTemporal":true},{"tipo":"POCION","peso":0,"nombre":"Pocion de vida","esTemporal":false}],"velocidad":6,"salud":80,"poderMagico":30}
