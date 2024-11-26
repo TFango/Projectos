@@ -4,23 +4,27 @@ import Trabajo.Enemigos.Combate;
 import Trabajo.Enemigos.Habitacion;
 import Trabajo.Enemigos.Mazmorra;
 import Trabajo.Inventario.*;
-import Trabajo.Personajes.Arquero;
-import Trabajo.Personajes.Guerrero;
-import Trabajo.Personajes.Mago;
-import Trabajo.Personajes.Personaje;
+import Trabajo.Personajes.*;
 import Trabajo.excepciones.OpcionInvalidaException;
 import Trabajo.excepciones.PersonajeException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws PersonajeException {
 
+        Administrador admin = new Administrador("admin","123");
         Personaje personajeActual = null;
+        Personaje personajeActualDemo = null;
+        String usuario = "Admin";
+        String contraseña = "123";
 
         String RESET = "\u001B[0m";
         final String VERDE = "\u001B[32m";
@@ -32,38 +36,23 @@ public class Main {
         boolean continuar = true;
 
         while (continuar) {
-            mostrarMenu();
+            menuInicial();
             System.out.println("Seleccione una opcion: ");
-            String opcion = sc.nextLine().trim();
+            String opcion = sc.nextLine();
 
             switch (opcion) {
                 case "1":
-                    try{
-                        personajeActual = crearPersonaje(sc);
-                    }catch (PersonajeException e){
+                    try {
+                        personajeActualDemo = crearPersonajeDemo(sc);
+                    } catch (PersonajeException e) {
                         System.out.println("Error: " + e.getMessage());
                     }
-                    break;
-                case "2":
-                    try{
-                        personajeActual = cargarPersonaje(sc);
-                    }catch (PersonajeException e){
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                    break;
-                case "3":
-                    try{
-                        borrarPersonaje(sc);
-                    }catch (PersonajeException e){
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                    break;
-                case "4":
-                    if (personajeActual != null) {
+
+                    if (personajeActualDemo != null) {
                         boolean explorando = true;
                         while (explorando) {
                             mostrarSubmenuExploracion();
-                            System.out.printf("Seleccione una opcion: ");
+                            System.out.println("Seleccione una opcion: ");
                             String opcionExploracion = sc.nextLine();
 
 
@@ -77,12 +66,14 @@ public class Main {
                                         for (Habitacion habitacion : habitaciones) {
                                             if (habitacion.tieneEnemigo()) {
 
-                                                Combate combate = new Combate(personajeActual, habitacion.getEnemigo());
+                                                Combate combate = new Combate(personajeActualDemo, habitacion.getEnemigo());
                                                 combate.iniciar();
 
-                                                if (!personajeActual.estaVivo()) {
+                                                if (!personajeActualDemo.estaVivo()) {
                                                     System.out.println("Has sido derrotado. Fin de la exploración.");
                                                     explorando = false;
+                                                    personajeActualDemo = null;
+                                                    System.out.println("Personaje eliminado");
                                                     break;
                                                 }
                                             }
@@ -96,83 +87,248 @@ public class Main {
                                         }
                                     }
 
-                                    if (mazmorraCompletada){
+                                    if (mazmorraCompletada) {
                                         System.out.println("━━━━━━━━━━━━━━━━━━━━━");
                                         System.out.println("🏆 **Haz completado la mazmorra. ¡Felicidades!**");
+                                        personajeActualDemo = null;
+                                        System.out.println("Personaje eliminado");
+                                        mostrarSubmenuExploracion();
                                     }
 
                                     explorando = false;
                                     break;
 
                                 case "2":
-                                    personajeActual.getInventario().mostrarInventario();
+                                    personajeActualDemo.getInventario().mostrarInventario();
                                     break;
                                 case "3":
                                     System.out.println("Ingrese el indice del objeto a usar: ");
                                     try {
                                         int index = Integer.parseInt(sc.nextLine());
-                                        if (index >= 0 && index < personajeActual.getInventario().getObjetos().size()) {
-                                            Objeto objetoUsado = personajeActual.getInventario().getObjetos().get(index);
+                                        if (index >= 0 && index < personajeActualDemo.getInventario().getObjetos().size()) {
+                                            Objeto objetoUsado = personajeActualDemo.getInventario().getObjetos().get(index);
 
                                             if (objetoUsado != null) {
                                                 if (objetoUsado.tipo() == TiposDeObjetos.ARMA) {
                                                     System.out.println("Usaste un arma. Fuerza aumentada temporalmente.");
-                                                    personajeActual.setFuerza(personajeActual.getFuerza() + objetoUsado.tipo().getEfecto());
-                                                    personajeActual.getInventario().removerObjeto(index);
+                                                    personajeActualDemo.setFuerza(personajeActualDemo.getFuerza() + objetoUsado.tipo().getEfecto());
+                                                    personajeActualDemo.getInventario().removerObjeto(index);
                                                 } else if (objetoUsado.tipo() == TiposDeObjetos.ARMADURA) {
                                                     System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
-                                                    personajeActual.setDefensa(personajeActual.getDefensa() + objetoUsado.tipo().getEfecto());
-                                                    personajeActual.getInventario().removerObjeto(index);
+                                                    personajeActualDemo.setDefensa(personajeActualDemo.getDefensa() + objetoUsado.tipo().getEfecto());
+                                                    personajeActualDemo.getInventario().removerObjeto(index);
                                                 } else if (objetoUsado.tipo() == TiposDeObjetos.POCION) {
                                                     System.out.println("Usaste una pocion. Salud restaurada.");
-                                                    personajeActual.setSalud(personajeActual.getSalud() + objetoUsado.tipo().getEfecto());
+                                                    personajeActualDemo.setSalud(personajeActualDemo.getSalud() + objetoUsado.tipo().getEfecto());
                                                 } else {
                                                     System.out.println("Objeto no valido.");
                                                 }
                                             } else {
                                                 System.out.println("objeto no encontrado en el inventario.");
                                             }
-                                        }else{
+                                        } else {
                                             throw new OpcionInvalidaException("Indice invalido.");
                                         }
                                     } catch (NumberFormatException e) {
                                         System.out.println("Entrada no valida. Ingrese un numero.");
-                                    } catch (OpcionInvalidaException e){
+                                    } catch (OpcionInvalidaException e) {
                                         System.out.println("Error: " + e.getMessage());
                                     }
                                     break;
-                                case "4":
-                                    System.out.println("Saliendo de la mazmorra.");
-                                    explorando = false;
-                                    break;
-                                default:
-                                    System.out.println("Opcion no valida. Intente de nuevo.");
-                                    break;
                             }
                         }
-                    } else {
-                        System.out.println("No hay personaje cargado.");
+                    }
+                    break;
+                case "2":
+                    mostrarMenu();
+                    System.out.println("Seleccione una opcion: ");
+                    String opcion2 = sc.nextLine();
+
+                    switch (opcion2) {
+                        case "1":
+                            try {
+                                personajeActual = crearPersonaje(sc);
+                            } catch (PersonajeException e) {
+                                System.out.println("Error: " + e.getMessage());
+                            }
+                            break;
+                        case "2":
+                            try {
+                                personajeActual = cargarPersonaje(sc);
+                            } catch (PersonajeException e) {
+                                System.out.println("Error: " + e.getMessage());
+                            }
+                            break;
+                        case "3":
+                            if (personajeActual != null) {
+                                boolean explorando = true;
+                                while (explorando) {
+                                    mostrarSubmenuExploracion();
+                                    System.out.printf("Seleccione una opcion: ");
+                                    String opcionExploracion = sc.nextLine();
+
+
+                                    switch (opcionExploracion) {
+                                        case "1":
+                                            Mazmorra mazmorra = new Mazmorra(3);
+                                            boolean mazmorraCompletada = false;
+
+                                            while (mazmorra.getPisoActual() < mazmorra.getCantidadPisos()) {
+                                                List<Habitacion> habitaciones = mazmorra.getHabitacionesDelPisoActual();
+                                                for (Habitacion habitacion : habitaciones) {
+                                                    if (habitacion.tieneEnemigo()) {
+
+                                                        Combate combate = new Combate(personajeActual, habitacion.getEnemigo());
+                                                        combate.iniciar();
+
+                                                        if (!personajeActual.estaVivo()) {
+                                                            System.out.println("Has sido derrotado. Fin de la exploración.");
+                                                            explorando = false;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                                if (mazmorra.avanzarPiso()) {
+                                                    System.out.println("Has avanzado al siguiente piso.");
+                                                } else {
+                                                    mazmorraCompletada = true;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (mazmorraCompletada) {
+                                                System.out.println("━━━━━━━━━━━━━━━━━━━━━");
+                                                System.out.println("🏆 **Haz completado la mazmorra. ¡Felicidades!**");
+                                            }
+
+                                            explorando = false;
+                                            break;
+
+                                        case "2":
+                                            personajeActual.getInventario().mostrarInventario();
+                                            break;
+                                        case "3":
+                                            System.out.println("Ingrese el indice del objeto a usar: ");
+                                            try {
+                                                int index = Integer.parseInt(sc.nextLine());
+                                                if (index >= 0 && index < personajeActual.getInventario().getObjetos().size()) {
+                                                    Objeto objetoUsado = personajeActual.getInventario().getObjetos().get(index);
+
+                                                    if (objetoUsado != null) {
+                                                        if (objetoUsado.tipo() == TiposDeObjetos.ARMA) {
+                                                            System.out.println("Usaste un arma. Fuerza aumentada temporalmente.");
+                                                            personajeActual.setFuerza(personajeActual.getFuerza() + objetoUsado.tipo().getEfecto());
+                                                            personajeActual.getInventario().removerObjeto(index);
+                                                        } else if (objetoUsado.tipo() == TiposDeObjetos.ARMADURA) {
+                                                            System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
+                                                            personajeActual.setDefensa(personajeActual.getDefensa() + objetoUsado.tipo().getEfecto());
+                                                            personajeActual.getInventario().removerObjeto(index);
+                                                        } else if (objetoUsado.tipo() == TiposDeObjetos.POCION) {
+                                                            System.out.println("Usaste una pocion. Salud restaurada.");
+                                                            personajeActual.setSalud(personajeActual.getSalud() + objetoUsado.tipo().getEfecto());
+                                                        } else {
+                                                            System.out.println("Objeto no valido.");
+                                                        }
+                                                    } else {
+                                                        System.out.println("objeto no encontrado en el inventario.");
+                                                    }
+                                                } else {
+                                                    throw new OpcionInvalidaException("Indice invalido.");
+                                                }
+                                            } catch (NumberFormatException e) {
+                                                System.out.println("Entrada no valida. Ingrese un numero.");
+                                            } catch (OpcionInvalidaException e) {
+                                                System.out.println("Error: " + e.getMessage());
+                                            }
+
+                                            break;
+                                        case "5":
+                                            System.out.println("╔══════════════════════════════════════════╗");
+                                            System.out.println(ROJO + "║ Saliendo del juego. ¡Hasta luego!        ║" + RESET);
+                                            System.out.println("╚══════════════════════════════════════════╝");
+                                            continuar = false;
+                                            break;
+                                        default:
+                                            System.out.println("╔══════════════════════════════════════════╗");
+                                            System.out.println("║ Opción no válida. Intente de nuevo.      ║");
+                                            System.out.println("╚══════════════════════════════════════════╝");
+                                            break;
+                                    }
+                                    if (continuar) {
+                                        System.out.println("\nPresiona ENTER para continuar...");
+                                        sc.nextLine();
+                                    }
+
+                                }
+                                sc.close();
+                            }
+
+                    }
+                case "3":
+                    int intentos = 0;
+                    while(intentos < 3){
+                        System.out.println("Porfavor ingrese el usuario...");
+                        String usuarioIngresado = sc.nextLine();
+                        System.out.println("Porfavor ingrese la contraseña...");
+                        String contraseñaIngresada = sc.nextLine();
+
+                        if(admin.autenticar(usuarioIngresado,contraseñaIngresada)){
+                            System.out.println("Autenticacion exisitosa. Bienvenido, administrador.");
+                            mostrarMenuAdministrador(admin,sc);
+                            break;
+                        }else {
+                            intentos++;
+                            System.out.println("Usuario o contraseña incorrectos. Intetos restantes: " + (3-intentos));
+                        }
                     }
 
+                    if(intentos >= 3){
+                        System.out.println("Demasiados intentos fallidos. Saliendo del modo Administrador.");
+                        break;
+                    }
+
+
                     break;
-                case "5":
-                    System.out.println("╔══════════════════════════════════════════╗");
-                    System.out.println(ROJO + "║ Saliendo del juego. ¡Hasta luego!        ║" + RESET);
-                    System.out.println("╚══════════════════════════════════════════╝");
-                    continuar = false;
-                    break;
-                default:
-                    System.out.println("╔══════════════════════════════════════════╗");
-                    System.out.println("║ Opción no válida. Intente de nuevo.      ║");
-                    System.out.println("╚══════════════════════════════════════════╝");
-                    break;
-            }
-            if (continuar) {
-                System.out.println("\nPresiona ENTER para continuar...");
-                sc.nextLine();
             }
         }
-        sc.close();
+    }
+
+
+    private static void menuInicial() {
+        System.out.println("Bienvenido al juego");
+        System.out.println("Como desea entrar?");
+        System.out.println("1. Jugar Demo");
+        System.out.println("2. Jugar juego completo");
+        System.out.println("3. Administrador.");
+    }
+
+    public static void mostrarMenuAdministrador(Administrador admin, Scanner sc) throws PersonajeException {
+        while (true) {
+            System.out.println("Opciones del administrador: ");
+            System.out.println("1. Ver todos los personajes." );
+            System.out.println("2. Borrar un personaje.");
+            System.out.println("3. Modificar nombre de un personaje.");
+            System.out.println("4. Salir.");
+
+            String opcion = sc.nextLine();
+
+            switch (opcion) {
+                case "1":
+                    admin.mostrarArchivosPersonajes();
+                    break;
+                case "2":
+                    borrarPersonaje(sc);
+                    break;
+                case "3":
+                    System.out.println("Ingrese el nombre del personaje a renombrar: ");
+                    String nombre = sc.nextLine();
+                    System.out.println("Ingrese el nuevo nombre del personaje: ");
+                    String nuevoNombre = sc.nextLine();
+                    admin.renombrarPersonaje(nombre,nuevoNombre);
+                    break;
+            }
+        }
     }
 
     private static void mostrarMenu() {
@@ -182,9 +338,8 @@ public class Main {
         System.out.println("╠═════════════════════════════════════╣");
         System.out.println("║  1. 🌟 Crear nuevo personaje        ║");
         System.out.println("║  2. ⚔️ Cargar personaje existente   ║");
-        System.out.println("║  3. ❌ Borrar personaje             ║");
-        System.out.println("║  4. 🌌 Explorar mazmorras           ║");
-        System.out.println("║  5. 🚪 Salir                        ║");
+        System.out.println("║  3. 🌌 Explorar mazmorras           ║");
+        System.out.println("║  4. 🚪 Salir                        ║");
         System.out.println("╚═════════════════════════════════════╝");
         mostrarSeparador();
     }
@@ -202,8 +357,39 @@ public class Main {
         mostrarSeparador();
     }
 
+    private static Personaje crearPersonajeDemo(Scanner sc) throws PersonajeException {
+        mostrarSeparador();
+        mostrarCarga();
+        System.out.println("╔═════════════════════════════════════╗");
+        System.out.println("║       Creando Personaje Demo        ║");
+        System.out.println("╚═════════════════════════════════════╝");
 
-    private static Personaje crearPersonaje(Scanner sc)throws PersonajeException {
+        System.out.print("Ingrese el nombre del personaje: ");
+        String nombre = sc.nextLine();
+
+        if (nombre.isEmpty()) {
+            throw new PersonajeException("El nombre del personaje no puede estar vacio.");
+        }
+        // Selección de clase
+        Personaje nuevoPersonajeDemo = null;
+        nuevoPersonajeDemo = new Mago(nombre);
+
+        nuevoPersonajeDemo.getInventario().agregarObjetos(new Arma());
+        nuevoPersonajeDemo.getInventario().agregarObjetos(new Armadura());
+        nuevoPersonajeDemo.getInventario().agregarObjetos(new Pocion());
+
+        nuevoPersonajeDemo.getInventario().mostrarInventario();
+
+
+        System.out.println("╔═════════════════════════════════════╗");
+        System.out.println("║          Personaje creado           ║");
+        System.out.println("╚═════════════════════════════════════╝");
+
+        return nuevoPersonajeDemo;
+    }
+
+
+    private static Personaje crearPersonaje(Scanner sc) throws PersonajeException {
         mostrarSeparador();
         mostrarCarga();
         System.out.println("╔═════════════════════════════════════╗");
@@ -213,7 +399,7 @@ public class Main {
         System.out.print("Ingrese el nombre del personaje: ");
         String nombre = sc.nextLine();
 
-        if(nombre.isEmpty()){
+        if (nombre.isEmpty()) {
             throw new PersonajeException("El nombre del personaje no puede estar vacio.");
         }
         // Selección de clase
@@ -238,12 +424,10 @@ public class Main {
                         nuevoPersonaje = new Arquero(nombre);
                         break;
                     default:
-                        throw new OpcionInvalidaException("╔═════════════════════════════════════╗" + "\n" +
-                                                          "║           Opción no válida.         ║" + "\n" +
-                                                          "╚═════════════════════════════════════╝");
+                        throw new OpcionInvalidaException("╔═════════════════════════════════════╗" + "\n" + "║           Opción no válida.         ║" + "\n" + "╚═════════════════════════════════════╝");
                 }
-            }catch (OpcionInvalidaException e){
-                System.out.println( e.getMessage());
+            } catch (OpcionInvalidaException e) {
+                System.out.println(e.getMessage());
             }
         }
 
@@ -254,10 +438,10 @@ public class Main {
         nuevoPersonaje.getInventario().mostrarInventario();
 
         System.out.print("\nIngresa el nombre del archivo para guardar: ");
-        String nombreArchivo = sc.nextLine();
+        String nombreArchivo = sc.nextLine() + ".json";
 
         boolean personajeGuardadoConExito = guardarPersonaje(nuevoPersonaje, nombreArchivo);
-        if(personajeGuardadoConExito) {
+        if (personajeGuardadoConExito) {
             System.out.println("╔═════════════════════════════════════╗");
             System.out.println("║     Personaje creado y guardado     ║");
             System.out.println("╚═════════════════════════════════════╝");
@@ -326,13 +510,13 @@ public class Main {
         }
     }
 
-    private static Personaje cargarPersonaje(Scanner scanner) throws  PersonajeException{
+    private static Personaje cargarPersonaje(Scanner scanner) throws PersonajeException {
         mostrarSeparador();
         mostrarCarga();
         System.out.println("Ingresa el nombre del archivo del personaje a cargar: ");
         String nombreArchivo = scanner.nextLine();
 
-        if(nombreArchivo.isEmpty()){
+        if (nombreArchivo.isEmpty()) {
             throw new PersonajeException("El nombre del archivo no puede estar vacio");
         }
 
@@ -427,13 +611,13 @@ public class Main {
 
     }
 
-    private static void borrarPersonaje(Scanner scanner) throws PersonajeException{
+    private static void borrarPersonaje(Scanner scanner) throws PersonajeException {
         mostrarSeparador();
         mostrarCarga();
         System.out.println("Ingresa el nombre del archivo del personaje a borrar: ");
         String archivo = scanner.nextLine();
 
-        if(archivo.isEmpty()){
+        if (archivo.isEmpty()) {
             throw new PersonajeException("El nombre del archivo no puede estar vacio.");
         }
 
