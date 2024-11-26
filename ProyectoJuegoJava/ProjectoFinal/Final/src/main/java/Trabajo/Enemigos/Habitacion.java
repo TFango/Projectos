@@ -7,9 +7,9 @@ public class Habitacion {
     public Habitacion(boolean esJefe) {
         this.esJefe = esJefe;
         if (esJefe) {
-            this.enemigo = new Enemigo("Jefe", 100, 20, 10, 50, 1000);
+            this.enemigo = new Enemigo("Jefe", 100, 20, 10, 50, 1000, 50);
         } else {
-            this.enemigo = new Enemigo("Enemigo", 50, 10, 5, 20,20);
+            this.enemigo = new Enemigo("Enemigo", 50, 10, 5, 20,20, 40);
         }
     }
 

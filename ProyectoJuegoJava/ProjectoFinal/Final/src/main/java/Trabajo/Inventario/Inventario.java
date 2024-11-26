@@ -1,7 +1,9 @@
 package Trabajo.Inventario;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Inventario  {
     private List<Objeto> objetos;
@@ -10,13 +12,13 @@ public class Inventario  {
 
     public Inventario(int capacidadMaxima) {
         this.objetos = new ArrayList<>();
+
         this.capacidadMaxima = capacidadMaxima;
     }
 
     public void agregarObjetos(Objeto objeto) {
         if(objetos.size() < capacidadMaxima){
             objetos.add(objeto);
-            //System.out.println("Has añadido " + objeto.getNombre() + " al inventario.");
         }else {
             System.out.println("Inventario lleno, no puedes añadir mas objetos.");
         }
@@ -32,13 +34,15 @@ public class Inventario  {
         }
     }
 
-    public void mostrarInventario(){
-        if(objetos.isEmpty()){
+    public void mostrarInventario() {
+        if (objetos.isEmpty()) {
             System.out.println("El inventario esta vacio.");
-        }else {
+        } else {
             System.out.println("Inventario: ");
-            for(Objeto objeto : objetos){
-                System.out.println("- " + objeto.nombre());
+            for (Objeto objeto : objetos) {
+                if (!objeto.estaUsado()) { // Solo mostrar objetos no usados
+                    System.out.println((objetos.indexOf(objeto) + 1) + "- " + objeto.nombre());
+                }
             }
         }
     }
@@ -57,5 +61,7 @@ public class Inventario  {
     public List<Objeto> getObjetos() {
         return objetos;
     }
+
+  //  public Map<Objeto, Integer> getIndiceObjeto() {return indiceObjeto;}
 }
 

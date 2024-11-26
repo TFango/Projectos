@@ -50,93 +50,131 @@ public class Main {
 
                     if (personajeActualDemo != null) {
                         boolean explorando = true;
-                        while (explorando) {
-                            mostrarSubmenuExploracion();
-                            System.out.println("Seleccione una opcion: ");
-                            String opcionExploracion = sc.nextLine();
+                            while (explorando) {
+                                mostrarSubmenuExploracion();
+                                System.out.println("Seleccione una opcion: ");
+                                String opcionExploracion = sc.nextLine();
+                                Tienda tienda = new Tienda(personajeActualDemo);
 
+                                switch (opcionExploracion) {
+                                    case "1":
+                                        Mazmorra mazmorra = new Mazmorra(1);
+                                        boolean mazmorraCompletada = false;
 
-                            switch (opcionExploracion) {
-                                case "1":
-                                    Mazmorra mazmorra = new Mazmorra(1);
-                                    boolean mazmorraCompletada = false;
+                                        while (mazmorra.getPisoActual() < mazmorra.getCantidadPisos()) {
+                                            List<Habitacion> habitaciones = mazmorra.getHabitacionesDelPisoActual();
+                                            for (Habitacion habitacion : habitaciones) {
+                                                if (habitacion.tieneEnemigo()) {
 
-                                    while (mazmorra.getPisoActual() < mazmorra.getCantidadPisos()) {
-                                        List<Habitacion> habitaciones = mazmorra.getHabitacionesDelPisoActual();
-                                        for (Habitacion habitacion : habitaciones) {
-                                            if (habitacion.tieneEnemigo()) {
+                                                    Combate combate = new Combate(personajeActualDemo, habitacion.getEnemigo(), tienda);
+                                                    combate.iniciar();
 
-                                                Combate combate = new Combate(personajeActualDemo, habitacion.getEnemigo());
-                                                combate.iniciar();
-
-                                                if (!personajeActualDemo.estaVivo()) {
-                                                    System.out.println("Has sido derrotado. Fin de la exploración.");
-                                                    explorando = false;
-                                                    personajeActualDemo = null;
-                                                    System.out.println("Personaje eliminado");
-                                                    break;
+                                                    if (!personajeActualDemo.estaVivo()) {
+                                                        System.out.println("Has sido derrotado. Fin de la exploración.");
+                                                        explorando = false;
+                                                        personajeActualDemo = null;
+                                                        System.out.println("Personaje eliminado");
+                                                        break;
+                                                    }
                                                 }
+                                            }
+
+                                            if (mazmorra.avanzarPiso()) {
+                                                System.out.println("Has avanzado al siguiente piso.");
+                                            } else {
+                                                mazmorraCompletada = true;
+                                                break;
                                             }
                                         }
 
-                                        if (mazmorra.avanzarPiso()) {
-                                            System.out.println("Has avanzado al siguiente piso.");
-                                        } else {
-                                            mazmorraCompletada = true;
-                                            break;
+                                        if (mazmorraCompletada) {
+                                            System.out.println("━━━━━━━━━━━━━━━━━━━━━");
+                                            System.out.println("🏆 **Haz completado la mazmorra. ¡Felicidades!**");
+                                            personajeActualDemo = null;
+                                            System.out.println("Personaje eliminado");
+                                            mostrarSubmenuExploracion();
                                         }
-                                    }
 
-                                    if (mazmorraCompletada) {
-                                        System.out.println("━━━━━━━━━━━━━━━━━━━━━");
-                                        System.out.println("🏆 **Haz completado la mazmorra. ¡Felicidades!**");
-                                        personajeActualDemo = null;
-                                        System.out.println("Personaje eliminado");
-                                        mostrarSubmenuExploracion();
-                                    }
+                                        explorando = false;
+                                        break;
 
-                                    explorando = false;
-                                    break;
+                                    case "2":
+                                        personajeActualDemo.getInventario().mostrarInventario();
+                                        break;
+                                    case "3":
+                                        System.out.println("Ingrese el indice del objeto a usar: ");
+                                        try {
+                                            int index = Integer.parseInt(sc.nextLine()) - 1;
+                                            if (index >= 0 && index < personajeActualDemo.getInventario().getObjetos().size()) {
+                                                Objeto objetoUsado = personajeActualDemo.getInventario().getObjetos().get(index);
 
-                                case "2":
-                                    personajeActualDemo.getInventario().mostrarInventario();
-                                    break;
-                                case "3":
-                                    System.out.println("Ingrese el indice del objeto a usar: ");
-                                    try {
-                                        int index = Integer.parseInt(sc.nextLine());
-                                        if (index >= 0 && index < personajeActualDemo.getInventario().getObjetos().size()) {
-                                            Objeto objetoUsado = personajeActualDemo.getInventario().getObjetos().get(index);
+                                                if (objetoUsado != null) {
+                                                    if (!objetoUsado.estaUsado()) {
 
-                                            if (objetoUsado != null) {
-                                                if (objetoUsado.tipo() == TiposDeObjetos.ARMA) {
-                                                    System.out.println("Usaste un arma. Fuerza aumentada temporalmente.");
-                                                    personajeActualDemo.setFuerza(personajeActualDemo.getFuerza() + objetoUsado.tipo().getEfecto());
-                                                    personajeActualDemo.getInventario().removerObjeto(index);
-                                                } else if (objetoUsado.tipo() == TiposDeObjetos.ARMADURA) {
-                                                    System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
-                                                    personajeActualDemo.setDefensa(personajeActualDemo.getDefensa() + objetoUsado.tipo().getEfecto());
-                                                    personajeActualDemo.getInventario().removerObjeto(index);
-                                                } else if (objetoUsado.tipo() == TiposDeObjetos.POCION) {
-                                                    System.out.println("Usaste una pocion. Salud restaurada.");
-                                                    personajeActualDemo.setSalud(personajeActualDemo.getSalud() + objetoUsado.tipo().getEfecto());
-                                                } else {
-                                                    System.out.println("Objeto no valido.");
+                                                        if (objetoUsado.tipo() == TiposDeObjetos.ARMA) {
+                                                            System.out.println("Usaste un arma. Fuerza aumentada temporalmente.");
+                                                            personajeActualDemo.setFuerza(personajeActualDemo.getFuerza() + objetoUsado.tipo().getEfecto());
+                                                            objetoUsado.marcarComoUsado();
+                                                        } else if (objetoUsado.tipo() == TiposDeObjetos.ARMADURA) {
+                                                            System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
+                                                            personajeActualDemo.setDefensa(personajeActualDemo.getDefensa() + objetoUsado.tipo().getEfecto());
+                                                            objetoUsado.marcarComoUsado();
+                                                        } else if (objetoUsado.tipo() == TiposDeObjetos.POCION) {
+                                                            System.out.println("Usaste una pocion. Salud restaurada.");
+                                                            personajeActualDemo.setSalud(personajeActualDemo.getSalud() + objetoUsado.tipo().getEfecto());
+                                                            objetoUsado.marcarComoUsado();
+                                                        } else {
+                                                            System.out.println("Objeto no valido.");
+                                                        }
+                                                    } else {
+                                                        System.out.println("objeto no encontrado en el inventario.");
+                                                    }
                                                 }
                                             } else {
-                                                System.out.println("objeto no encontrado en el inventario.");
+                                                throw new OpcionInvalidaException("Indice invalido.");
                                             }
-                                        } else {
-                                            throw new OpcionInvalidaException("Indice invalido.");
+                                        } catch (NumberFormatException e) {
+                                            System.out.println("Entrada no valida. Ingrese un numero.");
+                                        } catch (OpcionInvalidaException e) {
+                                            System.out.println("Error: " + e.getMessage());
                                         }
-                                    } catch (NumberFormatException e) {
-                                        System.out.println("Entrada no valida. Ingrese un numero.");
-                                    } catch (OpcionInvalidaException e) {
-                                        System.out.println("Error: " + e.getMessage());
-                                    }
-                                    break;
+                                        break;
+                                    case "4":
+                                        boolean tiendaAbierta = true;
+                                        while (tiendaAbierta) {
+                                            tienda.mostrarCatalogo();
+                                            System.out.println("Ingrese el indice del objeto que desea comprar o ingrese 'salir' para salir de la tienda: ");
+                                            String opcionTienda = sc.nextLine();
+
+                                            if (opcionTienda.equalsIgnoreCase("salir")) {
+                                                tiendaAbierta = false;
+                                                System.out.println("Saliendo de la tienda...");
+                                            } else {
+                                                try {
+                                                    int indice = Integer.parseInt(opcionTienda);
+                                                    Objeto objeto = tienda.ObjetoPorIndice(indice);
+
+                                                    if (objeto != null) {
+                                                        tienda.comprarObjetos(personajeActualDemo, objeto);
+                                                    } else {
+                                                        throw new OpcionInvalidaException("Indice no valido");
+                                                    }
+                                                } catch (NumberFormatException e) {
+                                                    System.out.println("Por favor ingrese un numero valido.");
+                                                } catch (OpcionInvalidaException e) {
+                                                    System.out.println(e.getMessage());
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case "5":
+                                        System.out.println("Saliendo de la demo...");
+                                        return;
+                                        default:
+                                        System.out.println("Opcion invalida");
+                                        break;
+                                }
                             }
-                        }
                     }
                     break;
                 case "2":
@@ -166,7 +204,7 @@ public class Main {
                                     mostrarSubmenuExploracion();
                                     System.out.printf("Seleccione una opcion: ");
                                     String opcionExploracion = sc.nextLine();
-
+                                    Tienda tienda = new Tienda(personajeActual);
 
                                     switch (opcionExploracion) {
                                         case "1":
@@ -178,7 +216,7 @@ public class Main {
                                                 for (Habitacion habitacion : habitaciones) {
                                                     if (habitacion.tieneEnemigo()) {
 
-                                                        Combate combate = new Combate(personajeActual, habitacion.getEnemigo());
+                                                        Combate combate = new Combate(personajeActual, habitacion.getEnemigo(), tienda);
                                                         combate.iniciar();
 
                                                         if (!personajeActual.estaVivo()) {
@@ -227,6 +265,7 @@ public class Main {
                                                         } else if (objetoUsado.tipo() == TiposDeObjetos.POCION) {
                                                             System.out.println("Usaste una pocion. Salud restaurada.");
                                                             personajeActual.setSalud(personajeActual.getSalud() + objetoUsado.tipo().getEfecto());
+                                                            personajeActual.getInventario().removerObjeto(index);
                                                         } else {
                                                             System.out.println("Objeto no valido.");
                                                         }
@@ -242,6 +281,34 @@ public class Main {
                                                 System.out.println("Error: " + e.getMessage());
                                             }
 
+                                            break;
+                                        case "4":
+                                            boolean tiendaAbierta = true;
+                                            while (tiendaAbierta) {
+                                                tienda.mostrarCatalogo();
+                                                System.out.println("Ingrese el indice del objeto que desea comprar o ingrese 'salir' para salir de la tienda: ");
+                                                String opcionTienda = sc.nextLine();
+
+                                                if (opcionTienda.equalsIgnoreCase("salir")) {
+                                                    tiendaAbierta = false;
+                                                    System.out.println("Saliendo de la tienda...");
+                                                } else {
+                                                    try {
+                                                        int indice = Integer.parseInt(opcionTienda);
+                                                        Objeto objeto = tienda.ObjetoPorIndice(indice);
+
+                                                        if (objeto != null) {
+                                                            tienda.comprarObjetos(personajeActualDemo, objeto);
+                                                        } else {
+                                                            throw new OpcionInvalidaException("Indice no valido");
+                                                        }
+                                                    } catch (NumberFormatException e) {
+                                                        System.out.println("Por favor ingrese un numero valido.");
+                                                    } catch (OpcionInvalidaException e) {
+                                                        System.out.println(e.getMessage());
+                                                    }
+                                                }
+                                            }
                                             break;
                                         case "5":
                                             System.out.println("╔══════════════════════════════════════════╗");
@@ -263,8 +330,9 @@ public class Main {
                                 }
                                 sc.close();
                             }
-
+                            break;
                     }
+                    break;
                 case "3":
                     int intentos = 0;
                     while(intentos < 3){
@@ -287,7 +355,6 @@ public class Main {
                         System.out.println("Demasiados intentos fallidos. Saliendo del modo Administrador.");
                         break;
                     }
-
 
                     break;
             }
@@ -312,22 +379,27 @@ public class Main {
             System.out.println("4. Salir.");
 
             String opcion = sc.nextLine();
-
-            switch (opcion) {
-                case "1":
-                    admin.mostrarArchivosPersonajes();
-                    break;
-                case "2":
-                    borrarPersonaje(sc);
-                    break;
-                case "3":
-                    System.out.println("Ingrese el nombre del personaje a renombrar: ");
-                    String nombre = sc.nextLine();
-                    System.out.println("Ingrese el nuevo nombre del personaje: ");
-                    String nuevoNombre = sc.nextLine();
-                    admin.renombrarPersonaje(nombre,nuevoNombre);
-                    break;
-            }
+                switch (opcion) {
+                    case "1":
+                        admin.mostrarArchivosPersonajes();
+                        break;
+                    case "2":
+                        borrarPersonaje(sc);
+                        break;
+                    case "3":
+                        System.out.println("Ingrese el nombre del personaje a renombrar: ");
+                        String nombre = sc.nextLine();
+                        System.out.println("Ingrese el nuevo nombre del personaje: ");
+                        String nuevoNombre = sc.nextLine();
+                        admin.renombrarPersonaje(nombre, nuevoNombre);
+                        break;
+                    case "4":
+                        System.out.println("Saliendo del Administrador...");
+                        return;
+                    default:
+                        System.out.println("Error, opcion invalida");
+                        break;
+                }
         }
     }
 
@@ -339,7 +411,8 @@ public class Main {
         System.out.println("║  1. 🌟 Crear nuevo personaje        ║");
         System.out.println("║  2. ⚔️ Cargar personaje existente   ║");
         System.out.println("║  3. 🌌 Explorar mazmorras           ║");
-        System.out.println("║  4. 🚪 Salir                        ║");
+        System.out.println("║  4. 🏪 Comprar objeto               ║");
+        System.out.println("║  5. 🚪 Salir                        ║");
         System.out.println("╚═════════════════════════════════════╝");
         mostrarSeparador();
     }
@@ -352,7 +425,8 @@ public class Main {
         System.out.println("║  1. Explorar Mazmorra     ║");
         System.out.println("║  2. Mostrar inventario    ║");
         System.out.println("║  3. Usar objeto           ║");
-        System.out.println("║  4. Salir                 ║");
+        System.out.println("║  4. Ver tienda            ║");
+        System.out.println("║  5. Salir                 ║");
         System.out.println("╚═══════════════════════════╝");
         mostrarSeparador();
     }

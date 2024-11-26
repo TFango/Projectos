@@ -9,14 +9,16 @@ public class Enemigo {
     private int defensa;
     private int experiencia;
     private int velocidad;
+    private int oro;
     private int saludMaxima = 100;
 
-    public Enemigo(String nombre, int vida, int ataque, int defensa, int experiencia, int velocidad) {
+    public Enemigo(String nombre, int vida, int ataque, int defensa, int experiencia, int velocidad, int oro) {
         this.nombre = nombre;
         this.vida = vida;
         this.ataque = ataque;
         this.defensa = defensa;
         this.experiencia = experiencia;
+        this.oro = oro;
         this.velocidad = velocidad;
     }
 
@@ -64,6 +66,10 @@ public class Enemigo {
         return velocidad;
     }
 
+    public int getOro() {return oro;}
+
+    public void setOro(int oro) {this.oro = oro;}
+
     public int atacar(){
         Random random = new Random();
         return ataque + random.nextInt(5);
@@ -89,7 +95,6 @@ public class Enemigo {
         barraSalud += "|";
         return barraSalud;
     }
-
 
     public boolean estaVivo(){
         return vida > 0;
