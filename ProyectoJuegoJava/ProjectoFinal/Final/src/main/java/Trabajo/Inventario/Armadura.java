@@ -7,12 +7,14 @@ public class Armadura implements Objeto{
     private int peso;
     private boolean esTemporal;
     private TiposDeObjetos tipo;
+    private boolean usado;
 
     public Armadura() {
         this.nombre = TiposDeObjetos.ARMADURA.getNombre();
         this.peso = TiposDeObjetos.ARMADURA.getPeso();
         this.esTemporal = TiposDeObjetos.ARMADURA.esTemporal();
         this.tipo = TiposDeObjetos.ARMADURA;
+        this.usado = false;
     }
     @Override
     public String nombre() {
@@ -33,6 +35,13 @@ public class Armadura implements Objeto{
     public TiposDeObjetos tipo() {
         return this.tipo;
     }
+
+    @Override
+    public boolean estaUsado() {return usado;}
+
+    @Override
+    public void marcarComoUsado() {this.usado = true;}
+
     @Override
     public void usar(Personaje personaje) {
         personaje.aumentarDefensa(this.tipo().getEfecto());

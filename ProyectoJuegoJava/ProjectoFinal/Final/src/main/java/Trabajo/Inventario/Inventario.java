@@ -16,7 +16,6 @@ public class Inventario  {
     public void agregarObjetos(Objeto objeto) {
         if(objetos.size() < capacidadMaxima){
             objetos.add(objeto);
-            //System.out.println("Has añadido " + objeto.getNombre() + " al inventario.");
         }else {
             System.out.println("Inventario lleno, no puedes añadir mas objetos.");
         }
@@ -41,17 +40,6 @@ public class Inventario  {
                 System.out.println("- " + objeto.nombre());
             }
         }
-    }
-
-    public Objeto obtenerPocion(){
-        for (int i = 0; i < objetos.size(); i++){
-            Objeto objeto = objetos.get(i);
-            if(objeto.tipo() == TiposDeObjetos.POCION){
-                removerObjeto(i);
-                return objeto;
-            }
-        }
-        return null;
     }
 
     public List<Objeto> getObjetos() {

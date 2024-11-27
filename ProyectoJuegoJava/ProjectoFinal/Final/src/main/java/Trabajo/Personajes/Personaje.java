@@ -13,6 +13,7 @@ public abstract class Personaje implements Objeto {
     protected int fuerza;
     protected int defensa;
     protected int velocidad;
+    protected int oro;
     protected int saludMaxima = 100;
     private int combatesGanados = 0;
     protected int experiencia = 0;
@@ -32,6 +33,7 @@ public abstract class Personaje implements Objeto {
         this.fuerza = fuerza;
         this.defensa = defensa;
         this.velocidad = velocidad;
+        this.oro = 50;
         this.inventario = new Inventario(10);
     }
 
@@ -49,6 +51,27 @@ public abstract class Personaje implements Objeto {
         this.salud -= cantidad;
         if (this.salud < 0) {
             this.salud = 0;
+        }
+    }
+
+    //----------
+    // GANAR ORO
+    //----------
+
+    public void ganarOro(int cantidad){
+        this.oro += cantidad;
+        System.out.println("Has ganado " + cantidad + " de monedas de oro!");
+    }
+
+    //--------------
+    // DESCONTAR ORO
+    //--------------
+
+    public void reducirOro(int cantidad){
+        if(cantidad <= oro){
+            oro -= cantidad;
+        }else {
+            System.out.println("No tienes suficiente oro.");
         }
     }
 
@@ -243,6 +266,14 @@ public abstract class Personaje implements Objeto {
         this.objetoUsado = objetoUsado;
     }
 
+    public int getOro() {
+        return oro;
+    }
+
+    public void setOro(int oro) {
+        this.oro = oro;
+    }
+
     @Override
     public String nombre() {return this.nombre;}
 
@@ -257,4 +288,16 @@ public abstract class Personaje implements Objeto {
 
     @Override
     public void usar(Personaje personaje) {}
+
+    @Override
+    public boolean estaUsado() {
+        return false;
+    }
+
+    @Override
+    public void marcarComoUsado() {}
+
+    public void mostrarOro(){
+        System.out.println("Tienes " + oro + " de oro.");
+    }
 }

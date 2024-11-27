@@ -4,7 +4,6 @@ import Trabajo.Enemigos.Enemigo;
 
     public class Arquero extends Personaje {
 
-        private static final long serialVersionUID = 1l;
         private int precision;
         private int agilidad;
 
@@ -39,6 +38,7 @@ import Trabajo.Enemigos.Enemigo;
         public void setAgilidad(int agilidad) {
             this.agilidad = agilidad;
         }
+
 
 
     }
