@@ -3,7 +3,6 @@ package Trabajo.Personajes;
 import Trabajo.Enemigos.Enemigo;
 
 public class Guerrero extends Personaje {
-    private static final long serialVersionUID = 1l;
     private int resistencia;
     private int fuerzaExtra;
 

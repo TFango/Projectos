@@ -7,6 +7,8 @@ public interface Objeto {
      int peso();
      boolean esTemporal();
      TiposDeObjetos tipo();
+     boolean estaUsado();
+     void marcarComoUsado();
 
      void usar(Personaje personaje);
 

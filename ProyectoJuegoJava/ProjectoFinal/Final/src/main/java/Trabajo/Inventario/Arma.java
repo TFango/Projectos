@@ -7,12 +7,14 @@ public class Arma implements Objeto {
     private int peso;
     private boolean esTemporal;
     private TiposDeObjetos tipo;
+    private boolean usado;
 
     public Arma() {
         this.nombre = TiposDeObjetos.ARMA.getNombre();
         this.peso = TiposDeObjetos.ARMA.getPeso();
         this.esTemporal = TiposDeObjetos.ARMA.esTemporal();
         this.tipo = TiposDeObjetos.ARMA;
+        this.usado = false;
     }
     @Override
     public String nombre() {
@@ -33,6 +35,13 @@ public class Arma implements Objeto {
     public TiposDeObjetos tipo() {
         return this.tipo;
     }
+
+    @Override
+    public boolean estaUsado(){return usado;}
+
+    @Override
+    public void marcarComoUsado(){this.usado = true;}
+
     @Override
     public void usar(Personaje personaje) {
         personaje.aumentarFuerza(this.tipo().getEfecto());

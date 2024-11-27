@@ -1,18 +1,23 @@
 package Trabajo.Enemigos;
 
+import Trabajo.Inventario.Objeto;
+import Trabajo.Inventario.Tienda;
 import Trabajo.Inventario.TiposDeObjetos;
 import Trabajo.Personajes.Personaje;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Combate {
     private Personaje jugador;
     private Enemigo enemigo;
+    private Tienda tienda;
     private Scanner sc;
 
-    public Combate(Personaje jugador, Enemigo enemigo) {
+    public Combate(Personaje jugador, Enemigo enemigo, Tienda tienda) {
         this.jugador = jugador;
         this.enemigo = enemigo;
+        this.tienda = new Tienda(jugador);
         this.sc = new Scanner(System.in);
     }
 
@@ -35,6 +40,7 @@ public class Combate {
                 System.out.println("🔹 Turno del jugador:");
                 System.out.println("1. 🗡️ Atacar");
                 System.out.println("2. 🛡️ Usar objeto.");
+                System.out.println("3. 🏪 Comprar objeto.");
                 System.out.print("**Elige una opción:** ");
                 int opcion = sc.nextInt();
 
@@ -45,6 +51,13 @@ public class Combate {
                     case 2:
                         usarObjeto();
                         break;
+                        case 3:
+                            tienda.mostrarCatalogo();
+                            System.out.println("Ingrese el indice del objeto que desea comprar: ");
+                            int indice = sc.nextInt();
+                            Objeto objetoComprado = tienda.ObjetoPorIndice(indice);
+                            tienda.comprarObjetos(jugador, objetoComprado);
+                            break;
                     default:
                         System.out.println("Opción no válida.");
                 }
@@ -59,6 +72,10 @@ public class Combate {
             if (!enemigo.estaVivo()) {
                 System.out.println("🏆 **¡Has derrotado a " + enemigo.getNombre() + "!**");
                 jugador.añadirExperiencia(enemigo.getExperiencia());
+                int oroGanado = enemigo.getOro();
+                jugador.ganarOro(oroGanado);
+                System.out.println("¡Has ganado " + enemigo.getOro() + " de oro!.");
+                jugador.mostrarOro();
                 jugador.registrarVictoria();
                 break;
             } else if (!jugador.estaVivo()) {
@@ -73,41 +90,25 @@ public class Combate {
 
 
     private void usarObjeto() {
+        List<Objeto> objetos = jugador.getInventario().getObjetos();
 
-        if (jugador.isObjetoUsado()) {
-            System.out.println("Ya has usado este objeto en el combate. No puedes usarlo devuelta.");
-            return;
+        System.out.println("Elige el tipo de objetos a usar: ");
+        for(int i = 0; i < objetos.size(); i++){
+            Objeto objeto = objetos.get(i);
+            System.out.println((i + 1) + ". " + objeto.nombre());
         }
-        System.out.println("Elige el tipo de objeto a usar: ");
-        System.out.println("1. Arma");
-        System.out.println("2. Armadura");
-        System.out.println("3. Pocion");
         int opcion = sc.nextInt();
+        int indice = opcion - 1;
+        Objeto objetoSellecionado = objetos.get(indice);
 
-        TiposDeObjetos objeto;
-        switch (opcion) {
-            case 1:
-                objeto = TiposDeObjetos.ARMA;
-                break;
-            case 2:
-                objeto = TiposDeObjetos.ARMADURA;
-                break;
-            case 3:
-                objeto = TiposDeObjetos.POCION;
-                break;
-            default:
-                System.out.println("Opcion no valida.");
-                return;
-        }
-        objeto.usar(jugador);
-
+        objetoSellecionado.usar(jugador);
         jugador.setObjetoUsado(true);
 
-        if (objeto.esTemporal()) {
-            System.out.println("El objeto " + objeto.getNombre() + " es temporal y se ha descartado tras esta batalla.");
+        jugador.getInventario().removerObjeto(indice);
+
+        if(objetoSellecionado.esTemporal()){
+            System.out.println("El objeto " + objetoSellecionado.nombre() + " es temporal y se ha descartado tras esta batalla.");
         }
     }
 
 }
-
-
