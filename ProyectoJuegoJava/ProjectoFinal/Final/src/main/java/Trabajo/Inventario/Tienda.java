@@ -8,10 +8,7 @@ import Trabajo.Personajes.Guerrero;
 import Trabajo.Personajes.Mago;
 import Trabajo.Personajes.Personaje;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Tienda {
     private Set<TiposDeObjetos> catalogo;
@@ -87,23 +84,32 @@ public class Tienda {
     public void mostrarCatalogo() {
         System.out.println("Bienvenido a la tienda: ");
         personaje.mostrarOro();
+
+        List<Objeto> objetosValidos = new ArrayList<>();
+        int index = 1;
+
         for(Map.Entry<Objeto, ObjetoDisponible> entry : objetosDisponibles.entrySet()){
             Objeto objeto = entry.getKey();
-            ObjetoDisponible objetoDisponible = entry.getValue();
+            ObjetoDisponible disponible = entry.getValue();
 
-            if(esObjetoValidoParaPersonaje(personaje, objeto)){
-                System.out.println("Objeto: " + objeto.nombre() + " - Precio: " + objetoDisponible.getPrecio() + " monedas - Stock: " + objetoDisponible.getStock());
+            if (esObjetoValidoParaPersonaje(personaje, objeto) || objeto instanceof Pocion || objeto instanceof Armadura) {
+                objetosValidos.add(objeto);
+                System.out.println(index + ". Objeto: " + objeto.nombre() + " - Precio: " + disponible.getPrecio()
+                        + " monedas - Stock: " + disponible.getStock());
+                index++;
             }
         }
+        objetosFiltrados = objetosValidos;
     }
 
     private boolean esObjetoValidoParaPersonaje(Personaje personaje, Objeto objeto) {
+
         if(personaje instanceof Guerrero){
-            return objeto instanceof Espada;
+            return objeto instanceof Espada || objeto instanceof Armadura || objeto instanceof Pocion;
         }else if (personaje instanceof Mago){
-            return objeto instanceof Varita;
+            return objeto instanceof Varita || objeto instanceof  Armadura || objeto instanceof Pocion;
         } else if (personaje instanceof Arquero) {
-            return objeto instanceof Arco;
+            return objeto instanceof Arco || objeto instanceof  Armadura || objeto instanceof Pocion;
         }
         return false;
     }
@@ -129,13 +135,11 @@ public class Tienda {
     // OBTENER INDICE DEL OBJETO
     //--------------------------
 
+    private List<Objeto> objetosFiltrados;
     public Objeto ObjetoPorIndice(int indice) {
-        int i = 1;
-        for(Objeto objeto : objetosDisponibles.keySet()) {
-            if(i == indice) {
-                return objeto;
-            }
-            i++;
+
+        if(indice > 0 && indice <= objetosFiltrados.size()){
+            return objetosFiltrados.get(indice - 1);
         }
         return null;
     }

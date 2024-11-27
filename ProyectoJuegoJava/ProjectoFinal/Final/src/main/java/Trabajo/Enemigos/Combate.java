@@ -118,6 +118,7 @@ public class Combate {
                 if(objetSellecionado.esTemporal()){
                     System.out.println("El objeto " + objetSellecionado.nombre() + " es temporal y se ha descartado tras esta batalla.");
                 }
+                break;
             }
 
         }
