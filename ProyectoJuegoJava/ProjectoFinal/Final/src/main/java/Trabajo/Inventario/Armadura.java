@@ -45,6 +45,5 @@ public class Armadura implements Objeto{
     @Override
     public void usar(Personaje personaje) {
         personaje.aumentarDefensa(this.tipo().getEfecto());
-        System.out.println(personaje.getNombre() + " ha aumentado la defensa.");
     }
 }

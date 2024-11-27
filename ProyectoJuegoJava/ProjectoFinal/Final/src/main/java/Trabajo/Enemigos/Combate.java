@@ -4,6 +4,7 @@ import Trabajo.Inventario.Objeto;
 import Trabajo.Inventario.Tienda;
 import Trabajo.Inventario.TiposDeObjetos;
 import Trabajo.Personajes.Personaje;
+import Trabajo.excepciones.OpcionInvalidaException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -49,7 +50,7 @@ public class Combate {
                         jugador.atacar(enemigo);
                         break;
                     case 2:
-                        usarObjeto();
+                            usarObjeto();
                         break;
                         case 3:
                             tienda.mostrarCatalogo();
@@ -89,25 +90,39 @@ public class Combate {
     }
 
 
-    private void usarObjeto() {
+    private void usarObjeto()  {
         List<Objeto> objetos = jugador.getInventario().getObjetos();
 
-        System.out.println("Elige el tipo de objetos a usar: ");
-        for(int i = 0; i < objetos.size(); i++){
-            Objeto objeto = objetos.get(i);
-            System.out.println((i + 1) + ". " + objeto.nombre());
+        if (objetos.isEmpty()) {
+            System.out.println("No tienes objetos para usar.");
+            return;
         }
-        int opcion = sc.nextInt();
-        int indice = opcion - 1;
-        Objeto objetoSellecionado = objetos.get(indice);
 
-        objetoSellecionado.usar(jugador);
-        jugador.setObjetoUsado(true);
+        while (true) {
 
-        jugador.getInventario().removerObjeto(indice);
+            System.out.println("Elige el tipo de objetos a usar: ");
+            for (int i = 0; i < objetos.size(); i++) {
+                Objeto objeto = objetos.get(i);
+                System.out.println((i + 1) + ". " + objeto.nombre());
+            }
 
-        if(objetoSellecionado.esTemporal()){
-            System.out.println("El objeto " + objetoSellecionado.nombre() + " es temporal y se ha descartado tras esta batalla.");
+            int opcion = sc.nextInt();
+            int indice = opcion - 1;
+
+                if (indice < 0 || indice >= objetos.size()) {
+                    System.out.println("Indice invalido.");
+                    continue;
+                }else{
+                Objeto objetoSellecionado = objetos.get(indice);
+                objetoSellecionado.usar(jugador);
+                jugador.setObjetoUsado(true);
+                jugador.getInventario().removerObjeto(indice);
+
+                if (objetoSellecionado.esTemporal()) {
+                    System.out.println("El objeto " + objetoSellecionado.nombre() + " es temporal y se ha descartado tras esta batalla.");
+                }
+                break;
+                }
         }
     }
 

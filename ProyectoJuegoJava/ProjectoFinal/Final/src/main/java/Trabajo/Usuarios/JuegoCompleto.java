@@ -204,7 +204,7 @@ public class JuegoCompleto {
                         System.out.println(ROJO + "║ Saliendo del juego. ¡Hasta luego!        ║" + RESET);
                         System.out.println("╚══════════════════════════════════════════╝");
                         explorando = false;
-                        break;
+                        return;
                     default:
                         System.out.println("╔══════════════════════════════════════════╗");
                         System.out.println("║ Opción no válida. Intente de nuevo.      ║");

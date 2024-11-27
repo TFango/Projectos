@@ -47,7 +47,6 @@ public class Pocion implements Objeto{
     @Override
     public void usar(Personaje personaje) {
         personaje.curar(this.tipo().efecto);
-        System.out.println(personaje.getNombre() + " ha usado una pocion.");
     }
 
 

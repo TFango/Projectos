@@ -145,9 +145,7 @@ public class ManejoPersonajes {
 
         Personaje personajeCargado = cargarPersonajeDesdeArchivo(nombreArchivo);
         if (personajeCargado != null) {
-            System.out.println("Personaje cargado con exito: " + personajeCargado);
-        } else {
-            System.out.println("Personaje no encontrado");
+            System.out.println("Personaje cargado con exito!.");
         }
         mostrarSeparador();
 

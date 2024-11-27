@@ -25,7 +25,6 @@ public class Inventario  {
         if(index >= 0 && index < objetos.size()){
             Objeto objeto = objetos.get(index);
             objetos.remove(index);
-            System.out.println("Has eliminado " + objeto.nombre()+ " al inventario.");
         }else {
             System.out.println("Indice invalido.");
         }

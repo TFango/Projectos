@@ -72,7 +72,7 @@ public class Administrador {
                     break;
                 case "4":
                     System.out.println("Saliendo del modo Administrador.");
-                    break;
+                    return;
                 default:
                     System.out.println("Opcion no valida.");
                     break;

@@ -35,7 +35,7 @@ public class JuegoDemo {
             System.out.println("Error: " + e.getMessage());
         }
 
-        if (personajeActualDemo == null) {
+        if (personajeActualDemo != null) {
             boolean explorando = true;
 
             while (explorando) {

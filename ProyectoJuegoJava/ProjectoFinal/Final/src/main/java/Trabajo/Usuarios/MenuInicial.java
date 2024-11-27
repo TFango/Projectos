@@ -20,6 +20,7 @@ public class MenuInicial {
             System.out.println("1. Jugar Demo");
             System.out.println("2. Jugar juego completo");
             System.out.println("3. Administrador");
+            System.out.println("4. Salir del menu");
             System.out.println("Sellecione una opcion: ");
 
             try {
@@ -42,6 +43,9 @@ public class MenuInicial {
                     Administrador administrador = new Administrador(sc);
                     administrador.iniciarAdministrador();
                     break;
+                case 4:
+                    System.out.println("Adios...");
+                    return;
                 default:
                     System.out.println("Opcion no valida");
             }

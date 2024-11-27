@@ -1,0 +1,1 @@
+{"tipo":"Arquero","agilidad":25,"precision":20,"defensa":10,"nombre":"ludmila","nivel":1,"fuerza":15,"inventario":[{"tipo":"ARMA","peso":5,"nombre":"Espada","esTemporal":true},{"tipo":"ARMADURA","peso":15,"nombre":"Armadura","esTemporal":true},{"tipo":"POCION","peso":0,"nombre":"Pocion de vida","esTemporal":false}],"velocidad":12,"salud":90}

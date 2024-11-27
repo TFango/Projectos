@@ -45,6 +45,5 @@ public class Arma implements Objeto {
     @Override
     public void usar(Personaje personaje) {
         personaje.aumentarFuerza(this.tipo().getEfecto());
-        System.out.println(personaje.getNombre() + " ha usado un arma.");
     }
 }
