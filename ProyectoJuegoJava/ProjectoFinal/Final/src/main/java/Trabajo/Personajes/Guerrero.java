@@ -18,9 +18,6 @@ public class Guerrero extends Personaje {
         enemigo.recibirDaño(this.fuerza);
     }
 
-    public void atacarEspecial(Personaje enemigo) {
-        enemigo.recibirDaño(this.fuerza + this.fuerzaExtra);
-    }
 
     public int getResistencia() {
         return resistencia;

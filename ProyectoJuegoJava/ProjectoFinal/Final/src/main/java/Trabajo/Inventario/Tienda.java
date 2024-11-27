@@ -1,5 +1,11 @@
 package Trabajo.Inventario;
 
+import Trabajo.Inventario.Armas.Arco;
+import Trabajo.Inventario.Armas.Espada;
+import Trabajo.Inventario.Armas.Varita;
+import Trabajo.Personajes.Arquero;
+import Trabajo.Personajes.Guerrero;
+import Trabajo.Personajes.Mago;
 import Trabajo.Personajes.Personaje;
 
 import java.util.HashMap;
@@ -22,7 +28,9 @@ public class Tienda {
         //TIPOS DE OBJETOS
         //----------------
 
-        Arma arma = new Arma();
+        Espada espada = new Espada();
+        Varita varita = new Varita();
+        Arco arco = new Arco();
         Armadura armadura = new Armadura();
         Pocion pocion = new Pocion();
 
@@ -30,7 +38,9 @@ public class Tienda {
         //PRECIOS Y STOCK
         //-----------------
 
-        objetosDisponibles.put(arma, new ObjetoDisponible(TiposDeObjetos.ARMA, 100, 2));
+        objetosDisponibles.put(espada, new ObjetoDisponible(TiposDeObjetos.ESPADA, 100, 2));
+        objetosDisponibles.put(varita, new ObjetoDisponible(TiposDeObjetos.VARITA, 100, 2));
+        objetosDisponibles.put(arco, new ObjetoDisponible(TiposDeObjetos.ARCO, 100, 2));
         objetosDisponibles.put(armadura, new ObjetoDisponible(TiposDeObjetos.ARMADURA, 75, 3));
         objetosDisponibles.put(pocion, new ObjetoDisponible(TiposDeObjetos.POCION, 35, 5));
     }
@@ -77,11 +87,25 @@ public class Tienda {
     public void mostrarCatalogo() {
         System.out.println("Bienvenido a la tienda: ");
         personaje.mostrarOro();
-        int i = 1;
-        for(Objeto objeto : objetosDisponibles.keySet()) {
-            System.out.println(i + ". " + objeto.nombre() + " - Precio: " + objetosDisponibles.get(objeto).getPrecio());
-            i++;
+        for(Map.Entry<Objeto, ObjetoDisponible> entry : objetosDisponibles.entrySet()){
+            Objeto objeto = entry.getKey();
+            ObjetoDisponible objetoDisponible = entry.getValue();
+
+            if(esObjetoValidoParaPersonaje(personaje, objeto)){
+                System.out.println("Objeto: " + objeto.nombre() + " - Precio: " + objetoDisponible.getPrecio() + " monedas - Stock: " + objetoDisponible.getStock());
+            }
         }
+    }
+
+    private boolean esObjetoValidoParaPersonaje(Personaje personaje, Objeto objeto) {
+        if(personaje instanceof Guerrero){
+            return objeto instanceof Espada;
+        }else if (personaje instanceof Mago){
+            return objeto instanceof Varita;
+        } else if (personaje instanceof Arquero) {
+            return objeto instanceof Arco;
+        }
+        return false;
     }
 
     //---------------
@@ -114,14 +138,6 @@ public class Tienda {
             i++;
         }
         return null;
-    }
-
-    //---------------------------------------
-    // VERIFICAR SI EL OBJETO ESTA DISPONIBLE
-    //---------------------------------------
-
-    public boolean estaDisponible(TiposDeObjetos tipo) {
-        return objetosDisponibles.containsKey(tipo);
     }
 }
 

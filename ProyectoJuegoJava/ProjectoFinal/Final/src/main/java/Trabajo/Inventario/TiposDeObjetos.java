@@ -12,11 +12,25 @@ public enum TiposDeObjetos{
     /**
      * Se crea un tipo objeto "arma" el cual sera temporal.
      */
-    ARMA("Espada", 5, 10, true) {
+    ESPADA("Espada Mejorada", 5, 15, true) {
         @Override
         public void usar(Personaje personaje) {
-            personaje.aumentarFuerza(ARMA.getEfecto());
-            System.out.println(personaje.getNombre() + " ha usado un arma y aumenta su daño por esta batalla");
+            personaje.aumentarFuerza(ESPADA.getEfecto());
+            System.out.println(personaje.getNombre() + " ha usado un arma mejorada y aumenta su daño por esta batalla");
+        }
+    },
+    VARITA("Varita Magica Mejorada", 5, 15, true){
+        @Override
+        public void usar(Personaje personaje) {
+            personaje.aumentarFuerza(VARITA.getEfecto());
+            System.out.println(personaje.getNombre() + " ha usado una varita mejorada y aumentado su poder magico");
+        }
+    },
+    ARCO("Arco mejorado", 5, 15, true){
+        @Override
+        public void usar(Personaje personaje) {
+            personaje.aumentarFuerza(ARCO.getEfecto());
+            System.out.println(personaje.getNombre() + " ha usado un arco mejorado y aumento su fuerza de tiro");
         }
     },
     /**

@@ -1,19 +1,21 @@
-package Trabajo.Inventario;
+package Trabajo.Inventario.Armas;
 
+import Trabajo.Inventario.Objeto;
+import Trabajo.Inventario.TiposDeObjetos;
 import Trabajo.Personajes.Personaje;
 
-public class Armadura implements Objeto {
+public class Arco implements Objeto {
     private String nombre;
     private int peso;
     private boolean esTemporal;
     private TiposDeObjetos tipo;
     private boolean usado;
 
-    public Armadura() {
-        this.nombre = TiposDeObjetos.ARMADURA.getNombre();
-        this.peso = TiposDeObjetos.ARMADURA.getPeso();
-        this.esTemporal = TiposDeObjetos.ARMADURA.esTemporal();
-        this.tipo = TiposDeObjetos.ARMADURA;
+    public Arco() {
+        this.nombre = TiposDeObjetos.ARCO.getNombre();
+        this.peso = TiposDeObjetos.ARCO.getPeso();
+        this.esTemporal = TiposDeObjetos.ARCO.esTemporal();
+        this.tipo = TiposDeObjetos.ARCO;
         this.usado = false;
     }
     @Override
@@ -37,13 +39,13 @@ public class Armadura implements Objeto {
     }
 
     @Override
-    public boolean estaUsado() {return usado;}
+    public boolean estaUsado(){return usado;}
 
     @Override
-    public void marcarComoUsado() {this.usado = true;}
+    public void marcarComoUsado(){this.usado = true;}
 
     @Override
     public void usar(Personaje personaje) {
-        personaje.aumentarDefensa(this.tipo().getEfecto());
+        personaje.aumentarFuerza(this.tipo().getEfecto());
     }
 }

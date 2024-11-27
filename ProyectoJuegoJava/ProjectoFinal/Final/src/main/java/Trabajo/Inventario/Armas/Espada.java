@@ -1,19 +1,21 @@
-package Trabajo.Inventario;
+package Trabajo.Inventario.Armas;
 
+import Trabajo.Inventario.Objeto;
+import Trabajo.Inventario.TiposDeObjetos;
 import Trabajo.Personajes.Personaje;
 
-public class Arma implements Objeto {
+public class Espada implements Objeto {
     private String nombre;
     private int peso;
     private boolean esTemporal;
     private TiposDeObjetos tipo;
     private boolean usado;
 
-    public Arma() {
-        this.nombre = TiposDeObjetos.ARMA.getNombre();
-        this.peso = TiposDeObjetos.ARMA.getPeso();
-        this.esTemporal = TiposDeObjetos.ARMA.esTemporal();
-        this.tipo = TiposDeObjetos.ARMA;
+    public Espada() {
+        this.nombre = TiposDeObjetos.ESPADA.getNombre();
+        this.peso = TiposDeObjetos.ESPADA.getPeso();
+        this.esTemporal = TiposDeObjetos.ESPADA.esTemporal();
+        this.tipo = TiposDeObjetos.ESPADA;
         this.usado = false;
     }
     @Override
@@ -45,6 +47,5 @@ public class Arma implements Objeto {
     @Override
     public void usar(Personaje personaje) {
         personaje.aumentarFuerza(this.tipo().getEfecto());
-        System.out.println(personaje.getNombre() + " ha usado un arma.");
     }
 }

@@ -19,10 +19,6 @@ import Trabajo.Enemigos.Enemigo;
             enemigo.recibirDaño(this.fuerza);
         }
 
-        public void dispararFlechaRapida(Personaje enemigo) {
-            enemigo.recibirDaño(this.fuerza + this.precision);
-        }
-
         public int getPrecision() {
             return precision;
         }

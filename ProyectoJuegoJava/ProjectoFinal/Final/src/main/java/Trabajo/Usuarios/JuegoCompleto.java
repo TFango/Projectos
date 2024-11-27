@@ -8,6 +8,7 @@ import Trabajo.Personajes.Personaje;
 import Trabajo.excepciones.OpcionInvalidaException;
 import Trabajo.excepciones.PersonajeException;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -87,7 +88,6 @@ public class JuegoCompleto {
     }
 
 
-
     public void explorarMazmorras() {
         if (personajeActual != null) {
             boolean explorando = true;
@@ -141,34 +141,39 @@ public class JuegoCompleto {
                         try {
                             int index = Integer.parseInt(sc.nextLine());
                             if (index >= 0 && index < personajeActual.getInventario().getObjetos().size()) {
-                                Objeto objeoUsado = personajeActual.getInventario().getObjetos().get(index);
+                                Objeto objetoUsado = personajeActual.getInventario().getObjetos().get(index);
 
-                                if (objeoUsado != null) {
-                                    if (objeoUsado.tipo() == TiposDeObjetos.ARMA) {
-                                        System.out.println("Usaste un arma. Fuerza aumentanda temporalmente.");
-                                        personajeActual.setFuerza(personajeActual.getFuerza() + objeoUsado.tipo().getEfecto());
-                                        objeoUsado.marcarComoUsado();
-                                    } else if (objeoUsado.tipo() == TiposDeObjetos.ARMADURA) {
-                                        System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
-                                        personajeActual.setDefensa(personajeActual.getDefensa() + objeoUsado.tipo().getEfecto());
-                                        objeoUsado.marcarComoUsado();
-                                    } else if (objeoUsado.tipo() == TiposDeObjetos.POCION) {
-                                        System.out.println("Usaste una pocion. Salud restaurada.");
-                                        personajeActual.setSalud(personajeActual.getSalud() + objeoUsado.tipo().getEfecto());
-                                        objeoUsado.marcarComoUsado();
-                                    } else {
-                                        System.out.println("Objeto no valido.");
+                                if (objetoUsado != null) {
+                                    switch (objetoUsado.tipo()) {
+                                        case ESPADA:
+                                        case ARCO:
+                                        case VARITA:
+                                            System.out.println("Usaste un " + objetoUsado.tipo().name().toLowerCase() + ". Fuerza aumentada temporalmente.");
+                                            personajeActual.setFuerza(personajeActual.getFuerza() + objetoUsado.tipo().getEfecto());
+                                            break;
+                                        case ARMADURA:
+                                            System.out.println("Usaste una armadura. Defensa aumentada temporalmente.");
+                                            personajeActual.setDefensa(personajeActual.getDefensa() + objetoUsado.tipo().getEfecto());
+                                            break;
+                                        case POCION:
+                                            System.out.println("Usaste un pocion. Salud aumentada.");
+                                            personajeActual.setSalud(personajeActual.getSalud() + objetoUsado.tipo().getEfecto());
+                                            break;
+                                        default:
+                                            System.out.println("Objeto no valido.");
+                                            return;
                                     }
-                                } else {
+                                    objetoUsado.marcarComoUsado();
+                                }else {
                                     System.out.println("Objeto no encontrado en el inventario.");
                                 }
                             } else {
                                 throw new OpcionInvalidaException("Indice invalido.");
                             }
-                        } catch (NumberFormatException e) {
+                        }catch (NumberFormatException e){
                             System.out.println("Entrada no valida. Ingrese un numero.");
-                        } catch (OpcionInvalidaException e) {
-                            System.out.println("Error: " + e.getMessage());
+                        }catch (OpcionInvalidaException e){
+                            System.out.println("ERROR: " + e.getMessage());
                         }
                         break;
                     case "4":
@@ -248,8 +253,6 @@ public class JuegoCompleto {
         }
         System.out.println();
     }
-
-
 
 
     String RESET = "\u001B[0m";

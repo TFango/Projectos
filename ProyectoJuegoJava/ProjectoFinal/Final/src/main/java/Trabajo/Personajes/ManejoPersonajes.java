@@ -1,6 +1,10 @@
 package Trabajo.Personajes;
 
 import Trabajo.Inventario.*;
+import Trabajo.Inventario.Armadura;
+import Trabajo.Inventario.Armas.Arco;
+import Trabajo.Inventario.Armas.Espada;
+import Trabajo.Inventario.Armas.Varita;
 import Trabajo.excepciones.OpcionInvalidaException;
 import Trabajo.excepciones.PersonajeException;
 import org.json.JSONObject;
@@ -39,12 +43,15 @@ public class ManejoPersonajes {
                 switch (claseSeleccionada) {
                     case "1":
                         nuevoPersonaje = new Guerrero(nombre);
+                        nuevoPersonaje.getInventario().agregarObjetos(new Espada());
                         break;
                     case "2":
                         nuevoPersonaje = new Mago(nombre);
+                        nuevoPersonaje.getInventario().agregarObjetos(new Varita());
                         break;
                     case "3":
                         nuevoPersonaje = new Arquero(nombre);
+                        nuevoPersonaje.getInventario().agregarObjetos(new Arco());
                         break;
                     default:
                         throw new OpcionInvalidaException("╔═════════════════════════════════════╗" + "\n" + "║           Opción no válida.         ║" + "\n" + "╚═════════════════════════════════════╝");
@@ -54,11 +61,9 @@ public class ManejoPersonajes {
             }
         }
 
-        nuevoPersonaje.getInventario().agregarObjetos(new Arma());
+
         nuevoPersonaje.getInventario().agregarObjetos(new Armadura());
         nuevoPersonaje.getInventario().agregarObjetos(new Pocion());
-
-        nuevoPersonaje.getInventario().mostrarInventario();
 
         System.out.print("\nIngresa el nombre del archivo para guardar: ");
         String nombreArchivo = sc.nextLine() + ".json";
@@ -80,6 +85,23 @@ public class ManejoPersonajes {
 
     public static boolean guardarPersonaje(Personaje personaje, String nombreArchivo) {
         JSONObject json = new JSONObject(); //Creacion de un objeto JSON, en este se almacenaran los datos del personaje
+
+        if (personaje instanceof Guerrero) {
+            Guerrero guerrero = (Guerrero) personaje;
+            if (!personaje.getInventario().contieneTipo(TiposDeObjetos.ESPADA)) {
+                personaje.getInventario().agregarObjetos(new Espada());
+            }
+        } else if (personaje instanceof Mago) {
+            Mago mago = (Mago) personaje;
+            if (!personaje.getInventario().contieneTipo(TiposDeObjetos.VARITA)) {
+                personaje.getInventario().agregarObjetos(new Varita());
+            }
+        } else if (personaje instanceof Arquero) {
+            Arquero arquero = (Arquero) personaje;
+            if (!personaje.getInventario().contieneTipo(TiposDeObjetos.ARCO)) {
+                personaje.getInventario().agregarObjetos(new Arco());
+            }
+        }
 
         //Se agregan los atributos que tienen en comun todos los personajes.
         json.put("nombre", personaje.getNombre());
@@ -186,7 +208,6 @@ public class ManejoPersonajes {
                 break;
             case "Arquero":
                 personaje = new Arquero(nombre);
-                // Establecer atributos adicionales
                 ((Arquero) personaje).setPrecision(json.getInt("precision"));
                 ((Arquero) personaje).setAgilidad(json.getInt("agilidad"));
                 break;
@@ -211,8 +232,14 @@ public class ManejoPersonajes {
             Objeto objeto = null;
 
             switch (tipoObjeto) {
-                case "ARMA":
-                    objeto = new Arma();
+                case "ESPADA":
+                    objeto = new Espada();
+                    break;
+                case "VARITA":
+                    objeto = new Varita();
+                    break;
+                case "ARCO":
+                    objeto = new Arco();
                     break;
                 case "ARMADURA":
                     objeto = new Armadura();
@@ -246,7 +273,7 @@ public class ManejoPersonajes {
         Personaje nuevoPersonajeDemo = null;
         nuevoPersonajeDemo = new Mago(nombre);
 
-        nuevoPersonajeDemo.getInventario().agregarObjetos(new Arma());
+        nuevoPersonajeDemo.getInventario().agregarObjetos(new Varita());
         nuevoPersonajeDemo.getInventario().agregarObjetos(new Armadura());
         nuevoPersonajeDemo.getInventario().agregarObjetos(new Pocion());
 
@@ -259,7 +286,6 @@ public class ManejoPersonajes {
 
         return nuevoPersonajeDemo;
     }
-
 
 
     private static void mostrarSeparador() {

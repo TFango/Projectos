@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Administrador {
     private String usuario;
     private String contraseña;
-    private Scanner sc;
+    private static Scanner sc;
 
     public Administrador(Scanner sc) {
         this.usuario = "admin";
@@ -42,7 +42,7 @@ public class Administrador {
 
         if (intentos >= 3) {
             System.out.println("Demasiados intentos fallidos. Saliendo del modo Administrador.");
-            return;
+
         }
     }
 
@@ -64,15 +64,11 @@ public class Administrador {
                     borrarPersonaje(sc);
                     break;
                 case "3":
-                    System.out.println("Ingrese el nombre del personaje a renombrar: ");
-                    String nombre = sc.nextLine();
-                    System.out.println("Ingrese el nuevo nombre del personaje: ");
-                    String nuevoNombre = sc.nextLine();
-                    renombrarPersonaje(nombre, nuevoNombre);
+                    modificarNombrePersonaje();
                     break;
                 case "4":
                     System.out.println("Saliendo del modo Administrador.");
-                    break;
+                    return;
                 default:
                     System.out.println("Opcion no valida.");
                     break;
@@ -107,6 +103,14 @@ public class Administrador {
         } else {
             System.out.println("La ruta especificada no es válida.");
         }
+    }
+
+    public static void modificarNombrePersonaje(){
+        System.out.println("Ingrese el nombre del personaje a renombrar: ");
+        String nombre = sc.nextLine();
+        System.out.println("Ingrese el nuevo nombre del personaje: ");
+        String nuevoNombre = sc.nextLine();
+        renombrarPersonaje(nombre, nuevoNombre);
     }
 
     public static void renombrarPersonaje(String nombreActual, String nuevoNombre) {
