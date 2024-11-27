@@ -1,0 +1,1 @@
+{"tipo":"Guerrero","resistencia":40,"fuerzaExtra":10,"defensa":20,"nombre":"Emita","nivel":1,"fuerza":50,"inventario":[{"tipo":"ESPADA","peso":5,"nombre":"Espada Mejorada","esTemporal":true},{"tipo":"ARMADURA","peso":15,"nombre":"Armadura","esTemporal":true},{"tipo":"POCION","peso":0,"nombre":"Pocion de vida","esTemporal":false}],"velocidad":7,"salud":120}

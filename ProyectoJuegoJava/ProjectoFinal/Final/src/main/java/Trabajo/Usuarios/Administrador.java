@@ -16,7 +16,7 @@ public class Administrador {
 
     public Administrador(Scanner sc) {
         this.usuario = "admin";
-        this.contraseña = "contraseña";
+        this.contraseña = "123";
         this.sc = sc;
     }
 
