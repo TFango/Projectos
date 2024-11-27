@@ -18,15 +18,6 @@ public class Mago extends Personaje {
         enemigo.recibirDaño(this.poderMagico);
     }
 
-    public void lanzarHechizo(Personaje enemigo) {
-        if(manaExtra >= 10) {
-            enemigo.recibirDaño(this.poderMagico * 2);
-            this.manaExtra -= 10;
-        }else {
-            System.out.println(nombre + " no tiene suficiente mana para lanzar un hechizo ");
-        }
-    }
-
     public int getPoderMagico() {
         return poderMagico;
     }

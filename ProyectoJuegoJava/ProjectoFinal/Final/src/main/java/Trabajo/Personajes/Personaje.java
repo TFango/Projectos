@@ -147,10 +147,6 @@ public abstract class Personaje implements Objeto {
         System.out.println("Los incrementos de fuerza y defenesa de " + nombre + " han sido revertidos.");
     }
 
-    public String obtenerSalud() {
-        return nombre + " tiene " + salud + " puntos de salud.";
-    }
-
     public String obtenerBarraSalud() {
         int longitudBarra = 20; // Longitud de la barra de salud
         int saludActual = (int) ((double) salud / saludMaxima * longitudBarra);
